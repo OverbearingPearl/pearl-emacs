@@ -1,4 +1,4 @@
-(dolist (dir '("common" "modules" "private"))
+(dolist (dir '("infra" "modules" "custom"))
   (add-to-list 'load-path (expand-file-name dir user-emacs-directory)))
 
 (require 'package)
