@@ -1,6 +1,11 @@
 (dolist (dir '("infra" "modules" "custom"))
   (add-to-list 'load-path (expand-file-name dir user-emacs-directory)))
 
+(setq custom-file (expand-file-name "custom/custom-vars.el" user-emacs-directory))
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+(load custom-file)
+
 (require 'package)
 (setq package-archives
       '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
