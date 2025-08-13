@@ -1,19 +1,64 @@
-# Compiled
+# Emacs core files
+*~
+\#*\#
+.\#*
 *.elc
+.DS_Store
+.projectile
 
-# Packaging
+# Directories
+.elpa/
 .cask/
 .eask/
 .eldev/
 .keg/
-
-# Built distribution
+auto-save-list/
+tramp/
 dist/
+build/
+.cache/
 
-# Backup files
-*~
+# Project files
+TAGS
+GTAGS
+GRTAGS
+GPATH
+tags
 
-# Undo-tree save-files
-*.~undo-tree
-
+# Custom files
 custom/custom-vars.el
+
+# Backup and undo files
+*.~undo-tree~
+*.bak
+*.tmp
+
+# Lock files
+.#*
+.lock
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.elc
+*.fasl
+*.o
+*.so
+*.dll
+*.a
+
+# Aider related files
+.aider*
+aider.log
+aider_cache.json
+
+# Transient related files
+.transient-*
+transient-history
