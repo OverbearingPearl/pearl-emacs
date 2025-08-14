@@ -30,6 +30,34 @@
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
   (setq aidermacs-default-model "deepseek/deepseek-coder")
+  (setq aidermacs-extra-args
+        '("--commit-language=en"
+          "--commit-prompt=Write commit message with:
+1. First line: short summary (max 50 chars)
+2. (Optional) Details if needed:
+   - Simple changes may not need details
+   - Complex changes can use:
+     * Bullet points (- or •)
+     * Numbered lists (1. 2. 3.)
+     * Multiple paragraphs
+     * Code blocks when relevant
+
+Examples:
+Simple change:
+Fix typo in README
+
+Complex change:
+Add user authentication
+
+- Implement login/logout endpoints
+- Add JWT token support
+- Include rate limiting
+  • 100 requests/minute
+  • 500 requests/hour
+- Update documentation
+
+Technical considerations:
+Used bcrypt for password hashing..."))
   :hook
   (aidermacs-before-run-backend
    .
