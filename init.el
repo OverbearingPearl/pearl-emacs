@@ -22,7 +22,8 @@
        (executable "pass" :error-msg "password-store (pass) not found"))
   :config
   (unless (ignore-errors (password-store-get "code/deepseek_api_key"))
-    (warn "API key not found in password store")))
+    (let ((key (read-string "DeepSeek API key (required for first-time setup): ")))
+      (password-store-insert "code/deepseek_api_key" key))))
 
 (use-package aidermacs
   :ensure t
@@ -32,15 +33,15 @@
   (setq aidermacs-default-model "deepseek/deepseek-coder")
   (setq aidermacs-extra-args
         '("--commit-language=en"
-          "--commit-prompt=Write commit message with:
-1. First line: short summary (max 50 chars)
-2. (Optional) Details if needed:
-   - Simple changes may not need details
-   - Complex changes can use:
+          "--commit-prompt=Write commit message following these guidelines:
+1. First line: concise summary (max 50 chars)
+2. (Optional) Additional details when necessary:
+   - Simple changes may omit details
+   - For complex changes consider:
      * Bullet points (- or •)
      * Numbered lists (1. 2. 3.)
      * Multiple paragraphs
-     * Code blocks when relevant
+     * Code blocks where applicable
 
 Examples:
 Simple change:
@@ -56,15 +57,7 @@ Add user authentication
   • 500 requests/hour
 - Update documentation
 
-Technical considerations:
+Implementation notes:
 Used bcrypt for password hashing..."))
-  :hook
-  (aidermacs-before-run-backend
-   .
-   (lambda ()
-     (unless (getenv "DEEPSEEK_API_KEY")
-       (let ((key (read-string "DeepSeek API key: "
-                               nil nil
-                               (password-store-get "code/deepseek_api_key"))))
-	 (setenv "DEEPSEEK_API_KEY" key)
-         (password-store-insert "code/deepseek_api_key" key))))))
+  :init
+  (setenv "DEEPSEEK_API_KEY" (ignore-errors (password-store-get "code/deepseek_api_key"))))
