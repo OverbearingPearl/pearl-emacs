@@ -16,8 +16,8 @@
 ;;   (prerequisite-check
 ;;    '(executable "git" "2.0.0")
 ;;    '(env-var "HOME")
-;;    '(file-empty "/tmp/log.txt")
-;;    '(directory-empty "/tmp/build"))
+;;    '(file "/tmp/log.txt")
+;;    '(directory "/tmp/build"))
 ;;
 ;; Available Prerequisites:
 ;; 1. Executable Check:
@@ -94,11 +94,17 @@ Returns the value if set and non-empty, nil otherwise."
          (not (string-empty-p value))
          value)))
 
-(defun preq--file-empty-p (filepath)
-  "Check if FILEPATH is an empty file.
-Returns t if file exists and has 0 size, nil otherwise."
+(defun preq--file-has-content-p (filepath)
+  "Check if FILEPATH exists and has content.
+Returns t if file exists and has size > 0, nil otherwise."
   (and (file-regular-p filepath)
-       (zerop (file-attribute-size (file-attributes filepath)))))
+       (> (file-attribute-size (file-attributes filepath)) 0)))
+
+(defun preq--dir-has-files-p (dirpath)
+  "Check if DIRPATH exists and contains files.
+Returns t if directory exists and contains files, nil otherwise."
+  (and (file-directory-p dirpath)
+       (directory-files dirpath nil directory-files-no-dot-files-regexp)))
 
 (defmacro prerequisite-check (&rest prerequisites)
   "Check multiple prerequisites with custom error messages."
@@ -138,13 +144,13 @@ Returns t if file exists and has 0 size, nil otherwise."
                       (setq all-passed nil)
                       (push ,msg failed-messages)
                       ,(when error-on-fail `(cl-return nil))))
-                  (`file-empty
-                   `(unless (preq--file-empty-p ,(car args))
+                  (`file
+                   `(unless (preq--file-has-content-p ,(car args))
                       (setq all-passed nil)
                       (push ,msg failed-messages)
                       ,(when error-on-fail `(cl-return nil))))
-                  (`directory-empty
-                   `(unless (preq--directory-empty-p ,(car args))
+                  (`directory
+                   `(unless (preq--dir-has-files-p ,(car args))
                       (setq all-passed nil)
                       (push ,msg failed-messages)
                       ,(when error-on-fail `(cl-return nil)))))))
