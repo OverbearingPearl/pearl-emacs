@@ -60,4 +60,11 @@ Add user authentication
 Implementation notes:
 Used bcrypt for password hashing..."))
   :init
-  (setenv "DEEPSEEK_API_KEY" (ignore-errors (password-store-get "code/deepseek_api_key"))))
+  (let ((api-key (ignore-errors (password-store-get "code/deepseek_api_key"))))
+    (unless api-key
+      (let ((key (read-string "DeepSeek API key (required for first-time setup): ")))
+        (when (ignore-errors (password-store-insert "code/deepseek_api_key" key))
+          (setq api-key key)
+          (message "API key stored successfully!"))))
+    (when api-key
+      (setenv "DEEPSEEK_API_KEY" api-key))))
