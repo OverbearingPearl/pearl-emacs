@@ -20,3 +20,4 @@
 (package-initialize)
 
 (require 'ai)
+(require 'git)
