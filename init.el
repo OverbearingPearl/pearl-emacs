@@ -12,6 +12,11 @@
         ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
         ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/")
         ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(when (or (not package-archive-contents)
+          (time-less-p package-archive-contents-last-update
+                       (time-subtract (current-time) (days-to-time 1))))
+  (package-refresh-contents))
+
 (package-initialize)
 
 (require 'ai)
