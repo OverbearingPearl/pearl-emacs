@@ -31,6 +31,8 @@ e.g. 9D479F6DAAD81B5E"))
 (use-package aidermacs
   :ensure t
   :after password-store
+  :if (prerequisite-check
+       (executable "aider" :error-msg "aider CLI not found"))
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
   (setq aidermacs-default-model "deepseek/deepseek-coder")
