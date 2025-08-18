@@ -2,6 +2,7 @@
   (add-to-list 'load-path (expand-file-name dir user-emacs-directory)))
 
 (setq custom-file (expand-file-name "custom/custom-vars.el" user-emacs-directory))
+(make-directory (file-name-directory custom-file) t)
 (unless (file-exists-p custom-file)
   (write-region "" nil custom-file))
 (load custom-file)
