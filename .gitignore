@@ -27,6 +27,7 @@ tags
 
 # Custom files
 custom/custom-vars.el
+custom/secrets-plain.el
 
 # Backup and undo files
 *.~undo-tree~
