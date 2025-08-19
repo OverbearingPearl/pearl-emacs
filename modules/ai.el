@@ -30,10 +30,7 @@ Add user authentication
 - Include rate limiting
   • 100 requests/minute
   • 500 requests/hour
-- Update documentation
-
-Implementation notes:
-Used bcrypt for password hashing..."))
+- Update documentation"))
   :init
   (let ((secret-file (expand-file-name "custom/secrets-plain.el" user-emacs-directory)))
     (when (file-exists-p secret-file)
