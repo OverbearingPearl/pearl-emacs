@@ -1,0 +1,14 @@
+;;; features.el.template --- Feature configuration template
+
+;;; Commentary:
+;; Uncomment the modules you want to use.
+;; This file will be automatically copied to features.el on first run if it doesn't exist.
+
+;;; Code:
+
+;; Uncomment the modules you want to use
+;; (require 'ai)
+;; (require 'git)
+;; Add more module requires here...
+
+;;; features.el.template ends here

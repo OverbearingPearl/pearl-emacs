@@ -16,6 +16,15 @@
   (write-region "" nil secret-file))
 (load secret-file)
 
+(defcustom feature-file (expand-file-name "custom/features.el" user-emacs-directory)
+  "Path to the file containing feature configurations."
+  :type 'file
+  :group 'custom)
+(make-directory (file-name-directory feature-file) t)
+(unless (file-exists-p feature-file)
+  (let ((template-file (expand-file-name "custom/features.el.template" user-emacs-directory)))
+    (copy-file template-file feature-file t)))
+
 (require 'package)
 (setq package-archives
       '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -30,5 +39,4 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(require 'ai)
-(require 'git)
+(load feature-file)
