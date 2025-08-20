@@ -32,18 +32,15 @@ Add user authentication
   • 500 requests/hour
 - Update documentation"))
   :init
-  (let ((secret-file (expand-file-name "custom/secrets-plain.el" user-emacs-directory)))
-    (when (file-exists-p secret-file)
-      (load secret-file))
-    (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key)))
-      (unless api-key
-        (let ((key (read-string "DeepSeek API key (required for first-time setup): ")))
-          (make-directory (file-name-directory secret-file) t)
-          (with-temp-file secret-file
-            (insert (format "(setq deepseek-api-key \"%s\")" key)))
-          (setq api-key key)
-          (message "API key stored in %s!" secret-file)))
-      (when api-key
-        (setenv "DEEPSEEK_API_KEY" api-key)))))
+  (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key)))
+    (unless api-key
+      (let ((key (read-string "DeepSeek API key (required for first-time setup): ")))
+        ;; Write the API key setting to the file (overwrite existing content)
+        (with-temp-file secret-file
+          (insert (format "(setq deepseek-api-key \"%s\")" key)))
+        (setq api-key key)
+        (message "API key stored in %s!" secret-file)))
+    (when api-key
+      (setenv "DEEPSEEK_API_KEY" api-key))))
 
 (provide 'ai)

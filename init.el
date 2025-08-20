@@ -7,6 +7,15 @@
   (write-region "" nil custom-file))
 (load custom-file)
 
+(defcustom secret-file (expand-file-name "custom/secrets-plain.el" user-emacs-directory)
+  "Path to the file containing secret configurations like API keys."
+  :type 'file
+  :group 'custom)
+(make-directory (file-name-directory secret-file) t)
+(unless (file-exists-p secret-file)
+  (write-region "" nil secret-file))
+(load secret-file)
+
 (require 'package)
 (setq package-archives
       '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
