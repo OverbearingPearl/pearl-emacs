@@ -133,7 +133,7 @@ While this is primarily a personal configuration, suggestions are welcome:
 
 ## 📄 License
 
-This configuration is distributed under the terms specified in the LICENSE file included in this repository. Please refer to the LICENSE file for detailed terms and conditions.
+This configuration is distributed under the GNU General Public License v3.0. Please refer to the [LICENSE](LICENSE) file for detailed terms and conditions.
 
 ## 🙏 Acknowledgments
 
