@@ -36,7 +36,6 @@ Add user authentication
   (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key)))
     (unless api-key
       (let ((key (read-string "DeepSeek API key (required for first-time setup): ")))
-        ;; Write the API key setting to the file (overwrite existing content)
         (with-temp-file secret-file
           (insert (format "(setq deepseek-api-key \"%s\")" key)))
         (setq api-key key)
