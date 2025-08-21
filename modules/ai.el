@@ -14,7 +14,7 @@
 2. (Optional) Additional details when necessary:
    - Simple changes may omit details
    - For complex changes consider:
-     * Bullet points (- or •)
+     * Bullet points (- • *)
      * Numbered lists (1. 2. 3.)
      * Multiple paragraphs
      * Code blocks where applicable
