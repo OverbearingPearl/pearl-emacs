@@ -3,8 +3,8 @@
 (use-package aidermacs
   :if (prerequisite-check
        (executable "aider" :error-msg "aider CLI not found"))
-  :bind (("C-c a" . aidermacs-transient-menu))
   :demand t
+  :bind (("C-c a" . aidermacs-transient-menu))
   :config
   (setq aidermacs-default-model "deepseek/deepseek-coder")
   (setq aidermacs-extra-args
