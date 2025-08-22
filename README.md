@@ -1,5 +1,7 @@
 # Pearl Emacs
 
+[中文文档](README_zh.md) | [English Documentation](README.md)
+
 My personal Emacs configuration built with `use-package` for efficient and organized package management.
 
 ## ✨ Features
