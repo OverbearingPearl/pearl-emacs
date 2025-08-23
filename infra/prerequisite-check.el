@@ -30,15 +30,15 @@
 ;;    Format: '(env-var VARIABLE-NAME)
 ;;    Example: '(env-var "HOME")
 ;;
-;; 3. File Empty Check:
-;;    Verifies if file is empty
-;;    Format: '(file-empty FILEPATH)
-;;    Example: '(file-empty "/tmp/log.txt")
+;; 3. File Content Check:
+;;    Verifies if file exists and has content
+;;    Format: '(file FILEPATH)
+;;    Example: '(file "/tmp/log.txt")
 ;;
-;; 4. Directory Empty Check:
-;;    Verifies if directory is empty
-;;    Format: '(directory-empty DIRPATH)
-;;    Example: '(directory-empty "/tmp/build")
+;; 4. Directory Content Check:
+;;    Verifies if directory exists and contains files
+;;    Format: '(directory DIRPATH)
+;;    Example: '(directory "/tmp/build")
 ;;
 ;; Behavior Modifiers:
 ;; ------------------
