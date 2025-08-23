@@ -1,6 +1,6 @@
 ;; Uncomment the modules you want to use.
 ;; This file will be automatically copied to features.el on first run if it doesn't exist.
 
-;; (require 'ai)
-;; (require 'git)
+(require 'ai)
+;;(require 'git)
 ;; Add more module requires here...
