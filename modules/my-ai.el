@@ -43,4 +43,4 @@ Add user authentication
     (when api-key
       (setenv "DEEPSEEK_API_KEY" api-key))))
 
-(provide 'ai)
+(provide 'my-ai)

@@ -19,8 +19,8 @@ My personal Emacs configuration built with `use-package` for efficient and organ
 pearl-emacs/
 ├── init.el                 # Main initialization file
 ├── modules/                # Modular configuration files
-│   ├── ai.el              # AI programming assistance configuration
-│   └── git.el             # Git integration settings
+│   ├── my-ai.el           # AI programming assistance configuration
+│   └── my-git.el          # Git integration settings
 ├── custom/                 # Custom templates and user configurations
 │   ├── features.el.template
 │   └── secrets-plain.el.template
@@ -83,12 +83,12 @@ For modules that require API keys (like the AI module), add them to `custom/secr
 
 ## 🧩 Available Modules
 
-### AI (`modules/ai.el`)
+### AI (`modules/my-ai.el`)
 - Integration with `aidermacs` for AI-assisted programming
 - Requires `aider` CLI tool to be installed
 - Configures DeepSeek API for code generation
 
-### Git (`modules/git.el`)
+### Git (`modules/my-git.el`)
 - Magit integration for powerful Git operations
 - Requires Git to be installed on the system
 

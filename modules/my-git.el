@@ -5,4 +5,4 @@
        (executable "git" :error-msg "git not found"))
   :config (magit-auto-revert-mode 1))
 
-(provide 'git)
+(provide 'my-git)
