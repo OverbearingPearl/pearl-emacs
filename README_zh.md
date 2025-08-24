@@ -19,8 +19,8 @@
 pearl-emacs/
 ├── init.el                 # 主初始化文件
 ├── modules/                # 模块化配置文件
-│   ├── ai.el              # AI 编程辅助配置
-│   └── git.el             # Git 集成设置
+│   ├── my-ai.el           # AI 编程辅助配置
+│   └── my-git.el          # Git 集成设置
 ├── custom/                 # 自定义模板和用户配置
 │   ├── features.el.template
 │   └── secrets-plain.el.template
@@ -84,12 +84,12 @@ pearl-emacs/
 
 ## 🧩 可用模块
 
-### AI (`modules/ai.el`)
+### AI (`modules/my-ai.el`)
 - 集成 `aidermacs` 用于 AI 辅助编程
 - 需要安装 `aider` CLI 工具
 - 配置 DeepSeek API 用于代码生成
 
-### Git (`modules/git.el`)
+### Git (`modules/my-git.el`)
 - Magit 集成用于强大的 Git 操作
 - 需要系统上安装 Git
 
