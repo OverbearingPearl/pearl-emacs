@@ -25,7 +25,7 @@ pearl-emacs/
 │   ├── features.el.template
 │   └── secrets-plain.el.template
 ├── infra/                  # Infrastructure and utility files
-│   └── prerequisite-check.el
+│   └── my-preq.el
 └── README.md              # This file
 ```
 

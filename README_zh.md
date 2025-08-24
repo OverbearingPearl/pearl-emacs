@@ -25,7 +25,7 @@ pearl-emacs/
 │   ├── features.el.template
 │   └── secrets-plain.el.template
 ├── infra/                  # 基础设施和实用文件
-│   └── prerequisite-check.el
+│   └── my-preq.el
 └── README.md              # 英文说明文件
 └── README_zh.md           # 中文说明文件
 ```
