@@ -1,7 +1,7 @@
-(require 'prerequisite-check)
+(require 'my-preq)
 
 (use-package aidermacs
-  :if (prerequisite-check
+  :if (my-preq
        (executable "aider" :error-msg "aider CLI not found"))
   :demand t
   :bind (("C-c a" . aidermacs-transient-menu))

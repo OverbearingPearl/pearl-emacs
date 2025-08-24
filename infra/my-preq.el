@@ -1,4 +1,4 @@
-;; prerequisite-check.el --- Utility functions for checking prerequisites
+;; my-preq.el --- Utility functions for checking prerequisites
 
 ;;; Commentary:
 
@@ -9,11 +9,11 @@
 ;;
 ;; Public Interface:
 ;; ----------------
-;; The only public interface is the `prerequisite-check' macro, which accepts
+;; The only public interface is the `my-preq' macro, which accepts
 ;; multiple prerequisites and optional behavior modifiers.
 ;;
 ;; Basic Usage:
-;;   (prerequisite-check
+;;   (my-preq
 ;;    '(executable "git" "2.0.0")
 ;;    '(env-var "HOME")
 ;;    '(file "/tmp/log.txt")
@@ -48,7 +48,7 @@
 ;;   When t, signals an error if any check fails
 ;;   Useful in init.el to prevent Emacs from starting with missing prerequisites
 ;;   Example:
-;;     (prerequisite-check
+;;     (my-preq
 ;;      '(executable "git")
 ;;      :error-on-fail t)
 ;;
@@ -56,7 +56,7 @@
 ;;   When t, suppresses warning messages for failed checks
 ;;   Useful for silent checking in functions
 ;;   Example:
-;;     (prerequisite-check
+;;     (my-preq
 ;;      '(executable "python")
 ;;      :quiet t)
 ;;
@@ -67,12 +67,12 @@
 ;; - By default, outputs warnings for failed checks via `warn'
 ;; - With :error-on-fail t, signals detailed error message on failure
 ;;
-;; Note: All functions prefixed with `preq--` are internal
+;; Note: All functions prefixed with `my-preq--` are internal
 ;; and should not be used directly.
 
 ;;; Code:
 
-(defun preq--executable (executable &optional min-version)
+(defun my-preq--executable (executable &optional min-version)
   "Check if EXECUTABLE exists and optionally verify its MIN-VERSION.
 Returns t if the executable exists and meets version requirements, nil otherwise.
 MIN-VERSION should be a string in format 'X.Y.Z'."
@@ -86,7 +86,7 @@ MIN-VERSION should be a string in format 'X.Y.Z'."
                (version<= min-version current-version)))
       t)))
 
-(defun preq--env-var (var-name)
+(defun my-preq--env-var (var-name)
   "Check if environment variable VAR-NAME is set and non-empty.
 Returns the value if set and non-empty, nil otherwise."
   (let ((value (getenv var-name)))
@@ -94,19 +94,19 @@ Returns the value if set and non-empty, nil otherwise."
          (not (string-empty-p value))
          value)))
 
-(defun preq--file-has-content-p (filepath)
+(defun my-preq--file-has-content-p (filepath)
   "Check if FILEPATH exists and has content.
 Returns t if file exists and has size > 0, nil otherwise."
   (and (file-regular-p filepath)
        (> (file-attribute-size (file-attributes filepath)) 0)))
 
-(defun preq--dir-has-files-p (dirpath)
+(defun my-preq--dir-has-files-p (dirpath)
   "Check if DIRPATH exists and contains files.
 Returns t if directory exists and contains files, nil otherwise."
   (and (file-directory-p dirpath)
        (directory-files dirpath nil directory-files-no-dot-files-regexp)))
 
-(defmacro prerequisite-check (&rest prerequisites)
+(defmacro my-preq (&rest prerequisites)
   "Check multiple prerequisites with custom error messages."
   (let ((checks ())
         (error-on-fail nil)
@@ -131,26 +131,26 @@ Returns t if directory exists and contains files, nil otherwise."
                                (pcase type
                                  (`executable (format "Missing executable: %s" (car args)))
                                  (`env-var    (format "Env var not set: %s" (car args)))
-                                 (`file-empty (format "File not empty: %s" (car args)))
-                                 (`directory-empty (format "Directory not empty: %s" (car args)))))))
+                                 (`file (format "File not found: %s" (car args)))
+                                 (`directory  (format "Directory not found: %s" (car args)))))))
                 (pcase type
                   (`executable
-                   `(unless (preq--executable ,(car args) ,(plist-get args :min-version))
+                   `(unless (my-preq--executable ,(car args) ,(plist-get args :min-version))
                       (setq all-passed nil)
                       (push ,msg failed-messages)
                       ,(when error-on-fail `(cl-return nil))))
                   (`env-var
-                   `(unless (preq--env-var ,(car args))
+                   `(unless (my-preq--env-var ,(car args))
                       (setq all-passed nil)
                       (push ,msg failed-messages)
                       ,(when error-on-fail `(cl-return nil))))
                   (`file
-                   `(unless (preq--file-has-content-p ,(car args))
+                   `(unless (my-preq--file-has-content-p ,(car args))
                       (setq all-passed nil)
                       (push ,msg failed-messages)
                       ,(when error-on-fail `(cl-return nil))))
                   (`directory
-                   `(unless (preq--dir-has-files-p ,(car args))
+                   `(unless (my-preq--dir-has-files-p ,(car args))
                       (setq all-passed nil)
                       (push ,msg failed-messages)
                       ,(when error-on-fail `(cl-return nil)))))))
@@ -168,5 +168,5 @@ Returns t if directory exists and contains files, nil otherwise."
 
        all-passed)))
 
-(provide 'prerequisite-check)
-;;; prerequisite-check.el ends here
+(provide 'my-preq)
+;;; my-preq.el ends here

@@ -1,8 +1,8 @@
-(require 'prerequisite-check)
+(require 'my-preq)
 
 (use-package magit
-  :if (prerequisite-check
-       (executable "git" :error-msg "git nod found"))
+  :if (my-preq
+       (executable "git" :error-msg "git not found"))
   :config (magit-auto-revert-mode 1))
 
 (provide 'git)
