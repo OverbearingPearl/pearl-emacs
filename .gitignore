@@ -17,6 +17,8 @@ tramp/
 dist/
 build/
 .cache/
+elpa/
+transient/
 
 # Project files
 TAGS
