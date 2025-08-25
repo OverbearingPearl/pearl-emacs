@@ -32,6 +32,7 @@ Add user authentication
   • 100 requests/minute
   • 500 requests/hour
 - Update documentation"))
+  (setq scroll-conservatively 101)
   :init
   (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key)))
     (unless api-key
