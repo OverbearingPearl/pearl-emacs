@@ -68,10 +68,12 @@ pearl-emacs/
 (require 'git)
 ```
 
-### API 密钥和机密信息
+### 机密信息和 API 密钥
 
-对于需要 API 密钥的模块（如 AI 模块），将它们添加到 `custom/secrets-plain.el`：
+添加您的私人机密信息和 API 密钥到 `custom/secrets-plain.el`：
 ```elisp
+;; 添加您的私人机密信息和 API 密钥到这里
+;; 此文件被 git 忽略，因此您的机密信息不会被提交
 (setq deepseek-api-key "your-api-key-here")
 ```
 
