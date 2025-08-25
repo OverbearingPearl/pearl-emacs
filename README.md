@@ -67,10 +67,12 @@ Edit `custom/features.el` to uncomment the modules you want to use:
 (require 'git)
 ```
 
-### API Keys and Secrets
+### Secrets and API Keys
 
-For modules that require API keys (like the AI module), add them to `custom/secrets-plain.el`:
+Add your private secrets and API keys to `custom/secrets-plain.el`:
 ```elisp
+;; Add your private secrets and API keys here
+;; This file is gitignored, so your secrets won't be committed
 (setq deepseek-api-key "your-api-key-here")
 ```
 
