@@ -3,7 +3,7 @@
 [中文文档](README_zh.md) | [English Documentation](README.md)
 
 我的个人 Emacs 配置，使用 `use-package` 构建，用于高效和有序的包管理。
-
+n
 ## ✨ 特性
 
 - **模块化设计**：配置拆分为模块以便更好地组织
@@ -19,15 +19,16 @@
 pearl-emacs/
 ├── init.el                 # 主初始化文件
 ├── modules/                # 模块化配置文件
-│   ├── my-ai.el           # AI 编程辅助配置
-│   └── my-git.el          # Git 集成设置
+│   ├── my-ai.el            # AI 编程辅助配置
+│   └── my-git.el           # Git 集成设置
 ├── custom/                 # 自定义模板和用户配置
 │   ├── features.el.template
 │   └── secrets-plain.el.template
 ├── infra/                  # 基础设施和实用文件
 │   └── my-preq.el
-└── README.md              # 英文说明文件
-└── README_zh.md           # 中文说明文件
+├── README.md               # 英文说明文件
+├── README_zh.md            # 中文说明文件
+└── LICENSE                 # 许可证文件
 ```
 
 ## 🚀 安装

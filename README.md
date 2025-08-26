@@ -19,14 +19,16 @@ My personal Emacs configuration built with `use-package` for efficient and organ
 pearl-emacs/
 ├── init.el                 # Main initialization file
 ├── modules/                # Modular configuration files
-│   ├── my-ai.el           # AI programming assistance configuration
-│   └── my-git.el          # Git integration settings
+│   ├── my-ai.el            # AI programming assistance configuration
+│   └── my-git.el           # Git integration settings
 ├── custom/                 # Custom templates and user configurations
 │   ├── features.el.template
 │   └── secrets-plain.el.template
 ├── infra/                  # Infrastructure and utility files
 │   └── my-preq.el
-└── README.md              # This file
+├── README.md               # English documentation
+├── README_zh.md            # Chinese documentation
+└── LICENSE                 # License file
 ```
 
 ## 🚀 Installation
