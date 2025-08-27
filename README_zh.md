@@ -3,7 +3,7 @@
 [中文文档](README_zh.md) | [English Documentation](README.md)
 
 我的个人 Emacs 配置，使用 `use-package` 构建，用于高效和有序的包管理。
-n
+
 ## ✨ 特性
 
 - **模块化设计**：配置拆分为模块以便更好地组织
