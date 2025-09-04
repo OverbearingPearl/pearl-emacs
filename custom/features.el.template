@@ -3,5 +3,6 @@
 
 (require 'my-ai)
 (require 'my-git)
+;; (require 'my-completion)
 ;; (require 'my-clojure)
 ;; Add more module requires here...
