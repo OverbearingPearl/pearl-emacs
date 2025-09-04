@@ -19,6 +19,7 @@ build/
 .cache/
 elpa/
 transient/
+eshell/
 
 # Project files
 TAGS
