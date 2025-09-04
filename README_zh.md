@@ -65,8 +65,8 @@ pearl-emacs/
 编辑 `custom/features.el` 取消注释要使用的模块：
 ```elisp
 ;; 取消注释要使用的模块
-(require 'ai)
-(require 'git)
+(require 'my-ai)
+(require 'my-git)
 ```
 
 ### 机密信息和 API 密钥
@@ -91,10 +91,21 @@ pearl-emacs/
 - 集成 `aidermacs` 用于 AI 辅助编程
 - 需要安装 `aider` CLI 工具
 - 配置 DeepSeek API 用于代码生成
+- 模块名称：`my-ai`
 
 ### Git (`modules/my-git.el`)
 - Magit 集成用于强大的 Git 操作
 - 需要系统上安装 Git
+- 模块名称：`my-git`
+
+### 代码补全 (`modules/my-completion.el`)
+- 使用 `company` 提供代码自动补全功能
+- 模块名称：`my-completion`
+
+### Clojure 开发 (`modules/my-clojure.el`)
+- 提供 Clojure 开发环境支持
+- 需要安装 Java
+- 模块名称：`my-clojure`
 
 ## 📋 前提条件
 
