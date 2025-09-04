@@ -65,8 +65,8 @@ pearl-emacs/
 Edit `custom/features.el` to uncomment the modules you want to use:
 ```elisp
 ;; Uncomment the modules you want to use
-(require 'ai)
-(require 'git)
+(require 'my-ai)
+(require 'my-git)
 ```
 
 ### Secrets and API Keys
@@ -91,10 +91,21 @@ Add your private secrets and API keys to `custom/secrets-plain.el`:
 - Integration with `aidermacs` for AI-assisted programming
 - Requires `aider` CLI tool to be installed
 - Configures DeepSeek API for code generation
+- Module name: `my-ai`
 
 ### Git (`modules/my-git.el`)
 - Magit integration for powerful Git operations
 - Requires Git to be installed on the system
+- Module name: `my-git`
+
+### Completion (`modules/my-completion.el`)
+- Uses `company` for code auto-completion
+- Module name: `my-completion`
+
+### Clojure Development (`modules/my-clojure.el`)
+- Provides Clojure development environment support
+- Requires Java to be installed
+- Module name: `my-clojure`
 
 ## 📋 Prerequisites
 
