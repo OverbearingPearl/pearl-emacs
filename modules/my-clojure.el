@@ -12,4 +12,10 @@
   (add-hook 'cider-mode-hook #'eldoc-mode)
   (add-hook 'cider-repl-mode-hook #'eldoc-mode))
 
+(use-package highlight-indent-guides
+  :hook (clojure-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-method 'bitmap)
+  (setq highlight-indent-guides-responsive 'top))
+
 (provide 'my-clojure)
