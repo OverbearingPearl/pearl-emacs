@@ -5,4 +5,5 @@
 (require 'my-git)
 ;; (require 'my-completion)
 ;; (require 'my-clojure)
+;; (require 'my-chinese)
 ;; Add more module requires here...
