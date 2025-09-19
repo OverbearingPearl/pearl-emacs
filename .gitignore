@@ -21,6 +21,9 @@ elpa/
 transient/
 eshell/
 
+# Files
+tramp
+
 # Project files
 TAGS
 GTAGS
