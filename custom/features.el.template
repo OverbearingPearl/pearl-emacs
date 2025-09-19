@@ -1,6 +1,7 @@
 ;; Uncomment the modules you want to use.
 ;; This file will be automatically copied to features.el on first run if it doesn't exist.
 
+(require 'my-ui)
 (require 'my-ai)
 (require 'my-git)
 ;; (require 'my-completion)

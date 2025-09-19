@@ -40,5 +40,3 @@
 (setq use-package-always-ensure t)
 
 (load feature-file)
-
-(setq-default indent-tabs-mode nil)
