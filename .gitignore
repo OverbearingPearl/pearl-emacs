@@ -6,6 +6,9 @@
 .DS_Store
 .projectile
 
+# Emacs package-specific files
+projectile-bookmarks.eld
+
 # Directories
 .elpa/
 .cask/
