@@ -16,6 +16,6 @@
   :hook (clojure-mode . highlight-indent-guides-mode)
   :config
   (setq highlight-indent-guides-method 'bitmap)
-  (setq highlight-indent-guides-responsive 'top))
+  (setq highlight-indent-guides-responsive 'stack))
 
 (provide 'my-clojure)
