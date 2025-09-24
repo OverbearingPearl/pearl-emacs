@@ -4,7 +4,6 @@
 (require 'my-ui)
 (require 'my-ai)
 (require 'my-git)
-;; (require 'my-project)
 ;; (require 'my-completion)
 ;; (require 'my-clojure)
 ;; (require 'my-chinese)
