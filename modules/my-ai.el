@@ -8,13 +8,21 @@
   :config
   (setq aidermacs-default-model "deepseek/deepseek-coder")
 
-  ;; Function to check for .aidermacs.prompting.md in git root
+  ;; Function to check for .aidermacs.prompting.md in git root, and copy template if needed
   (defun my/get-aidermacs-prompting-file ()
     (let ((git-root (vc-root-dir)))
       (when git-root
-        (let ((prompt-file (expand-file-name ".aidermacs.prompting.md" git-root)))
-          (when (file-exists-p prompt-file)
-            prompt-file)))))
+        (let ((prompt-file (expand-file-name ".aidermacs.prompting.md" git-root))
+              (template-file (expand-file-name "custom/aidermacs.prompting.md.template" user-emacs-directory)))
+          (cond
+           ((file-exists-p prompt-file)
+            prompt-file)
+           ((file-exists-p template-file)
+            (when (y-or-n-p (format "No .aidermacs.prompting.md found in project. Copy template from %s? " template-file))
+              (copy-file template-file prompt-file)
+              (message "Copied template to %s" prompt-file)
+              prompt-file))
+           (t nil))))))
 
   ;; Build the extra args list dynamically
   (defun my/build-aidermacs-extra-args ()
@@ -57,7 +65,8 @@ Add user authentication
   (my/update-aidermacs-extra-args)
   (setq scroll-conservatively 101)
   :init
-  (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key)))
+  (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key))
+        (secret-file (expand-file-name "custom/secrets.el" user-emacs-directory)))
     (unless api-key
       (let ((key (read-string "DeepSeek API key (required for first-time setup): ")))
         (with-temp-file secret-file
