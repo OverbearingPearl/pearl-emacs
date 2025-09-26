@@ -8,6 +8,9 @@
 
 # Emacs package-specific files
 projectile-bookmarks.eld
+org-persist/
+smex-items
+tree-sitter/
 
 # Directories
 .elpa/
