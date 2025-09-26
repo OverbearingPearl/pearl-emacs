@@ -39,4 +39,7 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+(if (eq system-type 'darwin)
+  (setq dired-use-ls-dired nil))
+
 (load feature-file)
