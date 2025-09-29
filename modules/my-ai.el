@@ -63,7 +63,6 @@ Add user authentication
   (advice-add 'aidermacs-transient-menu :before #'my/update-aidermacs-extra-args)
   ;; Initialize aidermacs-extra-args
   (my/update-aidermacs-extra-args)
-  (setq scroll-conservatively 101)
   :init
   (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key))
         (secret-file (expand-file-name "custom/secrets.el" user-emacs-directory)))
