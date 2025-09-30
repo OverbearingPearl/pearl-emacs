@@ -8,21 +8,31 @@
   :config
   (setq aidermacs-default-model "deepseek/deepseek-coder")
 
+  ;; Cache for prompting file decisions per project
+  (defvar my/aidermacs-prompting-file-cache (make-hash-table :test 'equal)
+    "Cache for prompting file decisions per project.")
+
   ;; Function to check for .aidermacs.prompting.md in git root, and copy template if needed
   (defun my/get-aidermacs-prompting-file ()
     (let ((git-root (vc-root-dir)))
       (when git-root
         (let ((prompt-file (expand-file-name ".aidermacs.prompting.md" git-root))
-              (template-file (expand-file-name "custom/aidermacs.prompting.md.template" user-emacs-directory)))
+              (template-file (expand-file-name "custom/aidermacs.prompting.md.template" user-emacs-directory))
+              (cached-decision (gethash git-root my/aidermacs-prompting-file-cache)))
           (cond
+           (cached-decision cached-decision)
            ((file-exists-p prompt-file)
+            (puthash git-root prompt-file my/aidermacs-prompting-file-cache)
             prompt-file)
            ((file-exists-p template-file)
             (when (y-or-n-p (format "No .aidermacs.prompting.md found in project. Copy template from %s? " template-file))
               (copy-file template-file prompt-file)
               (message "Copied template to %s" prompt-file)
+              (puthash git-root prompt-file my/aidermacs-prompting-file-cache)
               prompt-file))
-           (t nil))))))
+           (t
+            (puthash git-root nil my/aidermacs-prompting-file-cache)
+            nil))))))
 
   ;; Build the extra args list dynamically
   (defun my/build-aidermacs-extra-args ()
