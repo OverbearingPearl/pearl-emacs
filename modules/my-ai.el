@@ -20,16 +20,21 @@
               (template-file (expand-file-name "custom/aidermacs.prompting.md.template" user-emacs-directory))
               (cached-decision (gethash git-root my/aidermacs-prompting-file-cache)))
           (cond
-           (cached-decision cached-decision)
+           ;; If we have a cached decision, return it (but 'no-prompt-file should be treated as nil)
+           (cached-decision (and (not (eq cached-decision 'no-prompt-file)) cached-decision))
            ((file-exists-p prompt-file)
             (puthash git-root prompt-file my/aidermacs-prompting-file-cache)
             prompt-file)
            ((file-exists-p template-file)
-            (when (y-or-n-p (format "No .aidermacs.prompting.md found in project. Copy template from %s? " template-file))
-              (copy-file template-file prompt-file)
-              (message "Copied template to %s" prompt-file)
-              (puthash git-root prompt-file my/aidermacs-prompting-file-cache)
-              prompt-file))
+            (if (y-or-n-p (format "No .aidermacs.prompting.md found in project. Copy template from %s? " template-file))
+                (progn
+                  (copy-file template-file prompt-file)
+                  (message "Copied template to %s" prompt-file)
+                  (puthash git-root prompt-file my/aidermacs-prompting-file-cache)
+                  prompt-file)
+              ;; Cache the decision to not copy the template
+              (puthash git-root 'no-prompt-file my/aidermacs-prompting-file-cache)
+              nil))
            (t
             (puthash git-root nil my/aidermacs-prompting-file-cache)
             nil))))))
