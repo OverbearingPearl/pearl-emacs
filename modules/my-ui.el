@@ -5,16 +5,15 @@
 ;; Keep the cursor at the same screen position when possible
 (setq scroll-conservatively 101)
 
-;; Flash current line briefly on window changes
-(defun my/flash-hl-line (&rest _)
-  "Briefly highlight current line when window changes."
-  (hl-line-mode 1)
-  (run-with-timer 0.5 nil (lambda ()
-                            (hl-line-mode -1))))
-
-(add-hook 'window-selection-change-functions #'my/flash-hl-line)
-(add-hook 'window-configuration-change-hook #'my/flash-hl-line)
-(advice-add 'other-window :after #'my/flash-hl-line)
+(use-package beacon
+  :config
+  (beacon-mode 1)
+  ;; Optional: customize beacon behavior
+  (setq beacon-blink-when-point-moves-vertically 10
+        beacon-blink-when-point-moves-horizontally 10
+        beacon-blink-when-window-scrolls t
+        beacon-blink-when-window-changes t
+        beacon-blink-when-buffer-changes t))
 
 (use-package smart-mode-line
   :init
