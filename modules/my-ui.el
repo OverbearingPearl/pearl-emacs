@@ -9,9 +9,7 @@
   :config
   (beacon-mode 1)
   ;; Optional: customize beacon behavior
-  (setq beacon-blink-when-point-moves-vertically 10
-        beacon-blink-when-point-moves-horizontally 10
-        beacon-blink-when-window-scrolls t
+  (setq beacon-blink-when-window-scrolls nil
         beacon-blink-when-window-changes t
         beacon-blink-when-buffer-changes t))
 
