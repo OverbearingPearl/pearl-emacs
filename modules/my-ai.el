@@ -7,6 +7,7 @@
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
   (setq aidermacs-default-model "deepseek/deepseek-coder")
+  (setq aidermacs-show-diff-after-change nil)
 
   ;; Cache for prompting file decisions per project
   (defvar my/aidermacs-prompting-file-cache (make-hash-table :test 'equal)
