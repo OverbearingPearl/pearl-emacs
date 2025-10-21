@@ -5,6 +5,10 @@
 ;; Keep the cursor at the same screen position when possible
 (setq scroll-conservatively 101)
 
+;; Windmove configuration for easy window navigation
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings 'shift))
+
 (use-package beacon
   :config
   (beacon-mode 1)
