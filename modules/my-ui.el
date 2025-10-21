@@ -6,8 +6,16 @@
 (setq scroll-conservatively 101)
 
 ;; Windmove configuration for easy window navigation
-(when (fboundp 'windmove-default-keybindings)
-  (windmove-default-keybindings 'shift))
+;; Only configure if windmove is available
+(when (require 'windmove nil :noerror)
+  ;; Set up basic windmove keybindings
+  (windmove-default-keybindings 'shift)
+
+  ;; Set keybindings for window swapping
+  (global-set-key (kbd "M-S-<up>") 'windmove-swap-states-up)
+  (global-set-key (kbd "M-S-<down>") 'windmove-swap-states-down)
+  (global-set-key (kbd "M-S-<left>") 'windmove-swap-states-left)
+  (global-set-key (kbd "M-S-<right>") 'windmove-swap-states-right))
 
 (use-package beacon
   :config
