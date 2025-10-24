@@ -8,14 +8,33 @@
 ;; Windmove configuration for easy window navigation
 ;; Only configure if windmove is available
 (when (require 'windmove nil :noerror)
-  ;; Set up basic windmove keybindings
-  (windmove-default-keybindings 'shift)
+  (defun my/smart-window-switch ()
+    "Smart window switching.
+When only 2 windows exist, switch directly.
+When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swapping."
+    (interactive)
+    (let ((window-count (length (window-list))))
+      (cond
+       ((= window-count 1)
+        (message "Only one window"))
+       ((= window-count 2)
+        (other-window 1))
+       (t
+        (message "Use h/j/k/l for move, H/J/K/L for swap")
+        (let ((key (read-key "Window operation [h/j/k/l/H/J/K/L]: ")))
+          (cl-case key
+            (?h (windmove-left))
+            (?j (windmove-down))
+            (?k (windmove-up))
+            (?l (windmove-right))
+            (?H (windmove-swap-states-left))
+            (?J (windmove-swap-states-down))
+            (?K (windmove-swap-states-up))
+            (?L (windmove-swap-states-right))
+            (t (message "Invalid direction"))))))))
 
-  ;; Set keybindings for window swapping
-  (global-set-key (kbd "M-S-<up>") 'windmove-swap-states-up)
-  (global-set-key (kbd "M-S-<down>") 'windmove-swap-states-down)
-  (global-set-key (kbd "M-S-<left>") 'windmove-swap-states-left)
-  (global-set-key (kbd "M-S-<right>") 'windmove-swap-states-right))
+  ;; Smart window switching
+  (global-set-key (kbd "C-x o") 'my/smart-window-switch))
 
 (use-package beacon
   :config
