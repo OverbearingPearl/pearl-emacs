@@ -70,6 +70,9 @@ Add user authentication
   • 500 requests/hour
 - Update documentation\""))
           (prompt-file (my/get-aidermacs-prompting-file)))
+      ;; Add --chat-language=zh if my-chinese is required
+      (when (featurep 'my-chinese)
+        (setq base-args (cons "--chat-language=zh" base-args)))
       (if prompt-file
           (append base-args (list (concat "--read=" prompt-file)))
         base-args)))
