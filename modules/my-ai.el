@@ -6,7 +6,7 @@
        (executable "aider" :error-msg "aider CLI not found"))
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
-  (setq aidermacs-default-model "deepseek/deepseek-reasoner")
+  (setq aidermacs-default-model "deepseek/deepseek-coder")
   (setq aidermacs-weak-model "deepseek/deepseek-chat")
   (setq aidermacs-editor-model "deepseek/deepseek-coder")
   (setq aidermacs-architect-model "deepseek/deepseek-reasoner")
