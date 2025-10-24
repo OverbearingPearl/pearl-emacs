@@ -2,9 +2,9 @@
 ;; This file will be automatically copied to features.el on first run if it doesn't exist.
 
 (require 'my-ui)
+;; (require 'my-chinese)
 (require 'my-ai)
 (require 'my-git)
 ;; (require 'my-completion)
 ;; (require 'my-clojure)
-;; (require 'my-chinese)
 ;; Add more module requires here...
