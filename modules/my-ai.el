@@ -86,8 +86,7 @@ Add user authentication
   ;; Initialize aidermacs-extra-args
   (my/update-aidermacs-extra-args)
   :init
-  (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key))
-        (secret-file (expand-file-name "custom/secrets.el" user-emacs-directory)))
+  (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key)))
     (unless api-key
       (let ((key (read-string "DeepSeek API key (required for first-time setup): ")))
         (with-temp-file secret-file
