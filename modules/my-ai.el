@@ -6,10 +6,7 @@
        (executable "aider" :error-msg "aider CLI not found"))
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
-  (setq aidermacs-default-model "deepseek/deepseek-coder")
-  (setq aidermacs-weak-model "deepseek/deepseek-chat")
-  (setq aidermacs-editor-model "deepseek/deepseek-coder")
-  (setq aidermacs-architect-model "deepseek/deepseek-reasoner")
+  (setq aidermacs-default-model "openrouter/deepseek/deepseek-chat-v3.1")
   (setq aidermacs-show-diff-after-change nil)
 
   ;; Cache for prompting file decisions per project
@@ -86,14 +83,14 @@ Add user authentication
   ;; Initialize aidermacs-extra-args
   (my/update-aidermacs-extra-args)
   :init
-  (let ((api-key (and (boundp 'deepseek-api-key) deepseek-api-key)))
+  (let ((api-key (and (boundp 'openrouter-api-key) openrouter-api-key)))
     (unless api-key
-      (let ((key (read-string "DeepSeek API key (required for first-time setup): ")))
+      (let ((key (read-string "OpenRouter API key (required for first-time setup): ")))
         (with-temp-file secret-file
-          (insert (format "(setq deepseek-api-key \"%s\")" key)))
+          (insert (format "(setq openrouter-api-key \"%s\")" key)))
         (setq api-key key)
-        (message "API key stored in %s!" secret-file)))
+        (message "API key stored in secrets-plain.el!")))
     (when api-key
-      (setenv "DEEPSEEK_API_KEY" api-key))))
+      (setenv "OPENROUTER_API_KEY" api-key))))
 
 (provide 'my-ai)
