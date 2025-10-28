@@ -7,6 +7,7 @@
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
   (setq aidermacs-default-model "openrouter/deepseek/deepseek-chat-v3.1")
+  (setq aidermacs-weak-model "openrouter/mistralai/mistral-7b-instruct")
   (setq aidermacs-show-diff-after-change nil)
 
   ;; Add .aidermacs.prompting.md to project read-only files
