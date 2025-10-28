@@ -6,7 +6,7 @@
        (executable "aider" :error-msg "aider CLI not found"))
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
-  (setq aidermacs-default-model "openrouter/deepseek/deepseek-chat-v3.1")
+  (setq aidermacs-default-model "openrouter/google/gemini-2.0-flash-001")
   (setq aidermacs-weak-model "openrouter/mistralai/mistral-7b-instruct")
   (setq aidermacs-show-diff-after-change nil)
 
