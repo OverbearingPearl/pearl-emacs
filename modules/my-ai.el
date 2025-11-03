@@ -6,8 +6,6 @@
        (executable "aider" :error-msg "aider CLI not found"))
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
-  (setq aidermacs-default-model "openrouter/google/gemini-2.0-flash-001")
-  (setq aidermacs-weak-model "openrouter/google/gemini-2.0-flash-001")
   (setq aidermacs-show-diff-after-change nil)
 
   ;; Add .aidermacs.prompting.md to project read-only files
@@ -15,8 +13,13 @@
 
   ;; Build the extra args list dynamically
   (defun my/build-aidermacs-extra-args ()
-    (let ((base-args '("--commit-language=en"
-                       "--commit-prompt=\"Write commit message following these guidelines:
+    (let ((base-args '()))
+      (setq base-args (cons "--model=openrouter/google/gemini-2.0-flash-001" base-args))
+      (setq base-args (cons "--editor-model=openrouter/google/gemini-2.5-pro" base-args))
+      (setq base-args (cons "--weak-model=openrouter/google/gemini-2.0-flash-001" base-args))
+      (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
+      (setq base-args (cons "--commit-language=en" base-args))
+      (setq base-args (cons "--commit-prompt=\"Write commit message following these guidelines:
 1. First line: concise summary (max 50 chars)
 2. (Optional) Additional details when necessary:
    - Simple changes may omit details
@@ -38,10 +41,7 @@ Add user authentication
 - Include rate limiting
   • 100 requests/minute
   • 500 requests/hour
-- Update documentation\"")))
-      ;; Add --chat-language=zh if my-chinese is required
-      (when (featurep 'my-chinese)
-        (setq base-args (cons "--chat-language=zh" base-args)))
+- Update documentation\"" base-args))
       base-args))
 
   ;; Always update aidermacs-extra-args before using aidermacs commands
