@@ -2,8 +2,11 @@
 (require 'vc)
 
 (use-package aidermacs
-  :if (my-preq
-       (executable "aider" :error-msg "aider CLI not found"))
+  :if (or
+       (my-preq
+        (executable "aider" :error-msg "aider CLI not found") :on-fail silent)
+       (my-preq
+        (executable "aider-ce" :error-msg "aider-ce not found") :on-fail silent))
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
   (setq aidermacs-show-diff-after-change nil)
