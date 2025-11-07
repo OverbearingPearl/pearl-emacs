@@ -14,58 +14,59 @@
 ;;
 ;; Basic Usage:
 ;;   (my-preq
-;;    '(executable "git" "2.0.0")
-;;    '(env-var "HOME")
-;;    '(file "/tmp/log.txt")
-;;    '(directory "/tmp/build"))
+;;    (executable "git" "2.0.0")
+;;    (env-var "HOME")
+;;    (file "/tmp/log.txt")
+;;    (directory "/tmp/build"))
 ;;
 ;; Available Prerequisites:
 ;; 1. Executable Check:
 ;;    Verifies program existence and optional version
-;;    Format: '(executable PROGRAM-NAME [MIN-VERSION])
-;;    Example: '(executable "git" "2.0.0")
+;;    Format: '(executable PROGRAM-NAME [MIN-VERSION] [:error-msg MESSAGE])
+;;    Example: '(executable "git" "2.0.0" :error-msg "Git is required!")
 ;;
 ;; 2. Environment Variable Check:
 ;;    Ensures environment variable is set and non-empty
-;;    Format: '(env-var VARIABLE-NAME)
-;;    Example: '(env-var "HOME")
+;;    Format: '(env-var VARIABLE-NAME [:error-msg MESSAGE])
+;;    Example: '(env-var "HOME" :error-msg "HOME environment variable not set!")
 ;;
 ;; 3. File Content Check:
 ;;    Verifies if file exists and has content
-;;    Format: '(file FILEPATH)
-;;    Example: '(file "/tmp/log.txt")
+;;    Format: '(file FILEPATH [:error-msg MESSAGE])
+;;    Example: '(file "/tmp/log.txt" :error-msg "Log file missing or empty!")
 ;;
 ;; 4. Directory Content Check:
 ;;    Verifies if directory exists and contains files
-;;    Format: '(directory DIRPATH)
-;;    Example: '(directory "/tmp/build")
+;;    Format: '(directory DIRPATH [:error-msg MESSAGE])
+;;    Example: '(directory "/tmp/build" :error-msg "Build directory empty!")
 ;;
 ;; Behavior Modifiers:
 ;; ------------------
-;; Two optional keyword arguments can modify the macro's behavior:
+;; An optional keyword argument can modify the macro's behavior on failure:
 ;;
-;; :error-on-fail (boolean)
-;;   When t, signals an error if any check fails
-;;   Useful in init.el to prevent Emacs from starting with missing prerequisites
-;;   Example:
-;;     (my-preq
-;;      '(executable "git")
-;;      :error-on-fail t)
+;; :on-fail (symbol)
+;;   Specifies the action to take if any check fails. Can be one of:
+;;   - 'warn (default): Outputs a warning message for each failed check.
+;;   - 'error: Signals an error and stops Emacs loading/evaluation.
+;;   - 'silent: Suppresses all messages. An invalid option will raise an error.
 ;;
-;; :quiet (boolean)
-;;   When t, suppresses warning messages for failed checks
-;;   Useful for silent checking in functions
-;;   Example:
+;;   Example with 'error':
 ;;     (my-preq
-;;      '(executable "python")
-;;      :quiet t)
+;;      (executable "git")
+;;      :on-fail 'error)
+;;
+;;   Example with 'silent':
+;;     (my-preq
+;;      (executable "python")
+;;      :on-fail 'silent)
 ;;
 ;; Return Value:
 ;; ------------
-;; - Returns t if all checks pass
-;; - Returns nil if any check fails (unless :error-on-fail is t)
-;; - By default, outputs warnings for failed checks via `warn'
-;; - With :error-on-fail t, signals detailed error message on failure
+;; - Returns t if all checks pass.
+;; - If any check fails:
+;;   - with :on-fail 'warn (default), prints warnings and returns nil.
+;;   - with :on-fail 'error, signals a detailed error.
+;;   - with :on-fail 'silent, returns nil without any message.
 ;;
 ;; Note: All functions prefixed with `my-preq--` are internal
 ;; and should not be used directly.
@@ -109,16 +110,17 @@ Returns t if directory exists and contains files, nil otherwise."
 (defmacro my-preq (&rest prerequisites)
   "Check multiple prerequisites with custom error messages."
   (let ((checks ())
-        (error-on-fail nil)
-        (quiet nil))
+        (on-fail-behavior 'warn))
     (while prerequisites
       (let ((item (pop prerequisites)))
         (cond
-         ((eq item :error-on-fail) (setq error-on-fail (pop prerequisites)))
-         ((eq item :quiet)         (setq quiet (pop prerequisites)))
-         ((consp item)             (push item checks))
+         ((eq item :on-fail) (setq on-fail-behavior (pop prerequisites)))
+         ((consp item)      (push item checks))
          (t (error "Invalid prerequisite item: %S" item)))))
     (setq checks (nreverse checks))
+
+    (unless (memq on-fail-behavior '(warn error silent))
+      (error "Invalid :on-fail behavior: '%S'. Must be one of 'warn, 'error, or 'silent" on-fail-behavior))
 
     `(let ((all-passed t)
            (failed-messages ()))
@@ -126,42 +128,48 @@ Returns t if directory exists and contains files, nil otherwise."
          ,@(cl-mapcar
             (lambda (check)
               (let* ((type (car check))
-                     (args (cdr check))
-                     (msg  (or (plist-get args :error-msg)
-                               (pcase type
-                                 (`executable (format "Missing executable: %s" (car args)))
-                                 (`env-var    (format "Env var not set: %s" (car args)))
-                                 (`file (format "File not found: %s" (car args)))
-                                 (`directory  (format "Directory not found: %s" (car args)))))))
+                     (args (cdr check)))
                 (pcase type
                   (`executable
-                   `(unless (my-preq--executable ,(car args) ,(plist-get args :min-version))
-                      (setq all-passed nil)
-                      (push ,msg failed-messages)
-                      ,(when error-on-fail `(cl-return nil))))
+                   (let* ((program (car args))
+                          (rest-args (cdr args))
+                          (min-version (when (stringp (car rest-args))
+                                         (car rest-args)))
+                          (plist (if min-version (cdr rest-args) rest-args))
+                          (error-msg (plist-get plist :error-msg)))
+                     `(unless (my-preq--executable ,program ,min-version)
+                        (setq all-passed nil)
+                        (push ,(or error-msg (format "Missing executable: %s" program)) failed-messages)
+                        ,(when (eq on-fail-behavior 'error) `(cl-return nil)))))
                   (`env-var
-                   `(unless (my-preq--env-var ,(car args))
-                      (setq all-passed nil)
-                      (push ,msg failed-messages)
-                      ,(when error-on-fail `(cl-return nil))))
+                   (let* ((var-name (car args))
+                          (error-msg (plist-get (cdr args) :error-msg)))
+                     `(unless (my-preq--env-var ,var-name)
+                        (setq all-passed nil)
+                        (push ,(or error-msg (format "Env var not set: %s" var-name)) failed-messages)
+                        ,(when (eq on-fail-behavior 'error) `(cl-return nil)))))
                   (`file
-                   `(unless (my-preq--file-has-content-p ,(car args))
-                      (setq all-passed nil)
-                      (push ,msg failed-messages)
-                      ,(when error-on-fail `(cl-return nil))))
+                   (let* ((filepath (car args))
+                          (error-msg (plist-get (cdr args) :error-msg)))
+                     `(unless (my-preq--file-has-content-p ,filepath)
+                        (setq all-passed nil)
+                        (push ,(or error-msg (format "File not found: %s" filepath)) failed-messages)
+                        ,(when (eq on-fail-behavior 'error) `(cl-return nil)))))
                   (`directory
-                   `(unless (my-preq--dir-has-files-p ,(car args))
-                      (setq all-passed nil)
-                      (push ,msg failed-messages)
-                      ,(when error-on-fail `(cl-return nil)))))))
+                   (let* ((dirpath (car args))
+                          (error-msg (plist-get (cdr args) :error-msg)))
+                     `(unless (my-preq--dir-has-files-p ,dirpath)
+                        (setq all-passed nil)
+                        (push ,(or error-msg (format "Directory not found: %s" dirpath)) failed-messages)
+                        ,(when (eq on-fail-behavior 'error) `(cl-return nil))))))))
             checks))
 
-       ,(unless quiet
+       ,(when (eq on-fail-behavior 'warn)
           `(when failed-messages
              (dolist (msg (reverse failed-messages))
                (warn "%s" msg))))
 
-       ,(when error-on-fail
+       ,(when (eq on-fail-behavior 'error)
           `(when (not all-passed)
              (error "Prerequisite checks failed: %s"
                     (string-join (reverse failed-messages) "; "))))
