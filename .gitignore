@@ -76,3 +76,6 @@ aider_cache.json
 # Transient related files
 .transient-*
 transient-history
+
+# forge
+forge-db.sqlite
