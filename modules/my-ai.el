@@ -1,5 +1,6 @@
 (require 'my-preq)
 (require 'vc)
+(require 'auth-source)
 
 (use-package aidermacs
   :if (or
@@ -56,13 +57,8 @@ Add user authentication
   ;; Initialize aidermacs-extra-args
   (my/update-aidermacs-extra-args)
   :init
-  (let ((api-key (and (boundp 'openrouter-api-key) openrouter-api-key)))
-    (unless api-key
-      (let ((key (read-string "OpenRouter API key (required for first-time setup): ")))
-        (with-temp-file secret-file
-          (insert (format "(setq openrouter-api-key \"%s\")" key)))
-        (setq api-key key)
-        (message "API key stored in secrets-plain.el!")))
+  (let* ((source (car (auth-source-search :host "openrouter.ai" :user "api-key")))
+         (api-key (and source (plist-get source 'password))))
     (when api-key
       (setenv "OPENROUTER_API_KEY" api-key))))
 
