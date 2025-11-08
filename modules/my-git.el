@@ -6,7 +6,8 @@
   :config (magit-auto-revert-mode 1))
 
 (use-package forge
-  :after magit
+  :if (my-preq
+       (executable "git" :error-msg "git not found"))
   :config
   (setq forge-database-file (expand-file-name "forge-db.sqlite" user-emacs-directory)))
 
