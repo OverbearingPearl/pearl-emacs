@@ -39,7 +39,6 @@ tags
 
 # Custom files
 custom/custom-vars.el
-custom/secrets-plain.el
 custom/features.el
 
 # Backup and undo files
