@@ -18,7 +18,7 @@
   ;; Build the extra args list dynamically
   (defun my/build-aidermacs-extra-args ()
     (let ((base-args '()))
-      (setq base-args (cons "--model=openrouter/google/gemini-2.0-flash-001" base-args))
+      (setq base-args (cons "--model=openrouter/google/gemini-2.5-flash" base-args))
       (setq base-args (cons "--editor-model=openrouter/google/gemini-2.5-pro" base-args))
       (setq base-args (cons "--weak-model=openrouter/google/gemini-2.0-flash-001" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
