@@ -12,7 +12,7 @@
   :config
   (setq aidermacs-show-diff-after-change nil)
 
-  ;; Add .aidermacs.prompting.md to project read-only files
+  (add-to-list 'aidermacs-project-read-only-files "~/.aidermacs.prompting.md")
   (add-to-list 'aidermacs-project-read-only-files ".aidermacs.prompting.md")
 
   ;; Build the extra args list dynamically
