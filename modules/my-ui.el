@@ -15,11 +15,9 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
     (interactive)
     (let ((window-count (length (window-list))))
       (cond
-       ((= window-count 1)
-        (message "Only one window"))
-       ((= window-count 2)
+       ((<= window-count 3)
         (other-window 1))
-       (t
+       ((> window-count 3)
         (message "Use h/j/k/l for move, H/J/K/L for swap")
         (let ((key (read-key "Window operation [h/j/k/l/H/J/K/L]: ")))
           (cl-case key
