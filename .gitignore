@@ -3,7 +3,6 @@
 \#*\#
 .\#*
 *.elc
-.DS_Store
 .projectile
 
 # Emacs package-specific files
