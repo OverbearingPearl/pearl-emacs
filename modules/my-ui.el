@@ -1,6 +1,30 @@
 (setq-default indent-tabs-mode nil)
 (scroll-bar-mode -1)
 
+(defun my/set-english-font ()
+  "Set English/Latin font to JetBrains Mono.
+If the font is not found, display a warning with installation instructions.
+This font is used alongside LXGW WenKai Mono for 2:1 monospace."
+  (interactive)
+  (if (find-font (font-spec :name "JetBrains Mono"))
+      (progn
+        ;; Set default font to JetBrains Mono with medium weight
+        (set-face-attribute 'default nil
+                           :family "JetBrains Mono"
+                           :height 140   ; Fixed height for 2:1 monospace alignment
+                           :weight 'medium)
+        ;; Ensure Latin characters use JetBrains Mono
+        (set-fontset-font t 'latin "JetBrains Mono")
+        ;; Optional: adjust line spacing for better appearance
+        (setq-default line-spacing 0.2))
+    (message "Warning: JetBrains Mono font not found, using system default font.
+Installation commands:
+macOS (Homebrew): brew install font-jetbrains-mono
+Ubuntu/Debian: sudo apt install fonts-jetbrains-mono
+Download from: https://www.jetbrains.com/lp/mono/")))
+
+(add-hook 'after-init-hook #'my/set-english-font)
+
 ;; Prevent automatic recentering when scrolling
 ;; Keep the cursor at the same screen position when possible
 (setq scroll-conservatively 101)
