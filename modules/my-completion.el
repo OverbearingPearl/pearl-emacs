@@ -28,9 +28,6 @@
                  nil
                  (window-parameters (mode-line-format . none)))))
 
-(use-package embark-consult
-  :hook (embark-collect-mode . consult-preview-at-point-mode))
-
 (use-package consult
   :bind (("C-s" . consult-line)
          ("C-c M-x" . consult-mode-command)
@@ -70,6 +67,16 @@
         register-preview-function #'consult-register-format)
   :config
   (advice-add #'register-preview :override #'consult-register-window))
+
+(use-package wgrep
+  :config
+  (setq wgrep-auto-save-buffer t)
+  (setq wgrep-change-readonly-file t))
+
+(use-package embark-consult
+  :hook (embark-collect-mode . consult-preview-at-point-mode)
+  :config
+  (add-hook 'embark-collect-mode-hook #'wgrep-setup))
 
 (use-package company
   :hook (after-init . global-company-mode))
