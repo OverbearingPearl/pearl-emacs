@@ -75,4 +75,29 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
   (setq rm-blacklist
         '(" company" " yas" " WK" " Undo-Tree")))
 
+(use-package highlight-indent-guides
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :config
+  (setq highlight-indent-guides-auto-enabled nil)
+  (defun my/set-indent-guide-colors ()
+    (setq highlight-indent-guides-method 'fill)
+    (setq highlight-indent-guides-responsive 'stack)
+    (if (eq (frame-parameter nil 'background-mode) 'dark)
+        (progn
+          ;; (set-face-background 'highlight-indent-guides-odd-face "#404040")
+          ;; (set-face-background 'highlight-indent-guides-even-face "#505050")
+          (set-face-background 'highlight-indent-guides-stack-odd-face "#606060")
+          (set-face-background 'highlight-indent-guides-stack-even-face "#707070")
+          (set-face-background 'highlight-indent-guides-top-odd-face "#808080")
+          (set-face-background 'highlight-indent-guides-top-even-face "#909090"))
+      (progn
+        ;; (set-face-background 'highlight-indent-guides-odd-face "#E0E0E0")
+        ;; (set-face-background 'highlight-indent-guides-even-face "#D0D0D0")
+        (set-face-background 'highlight-indent-guides-stack-odd-face "#C0C0C0")
+        (set-face-background 'highlight-indent-guides-stack-even-face "#B0B0B0")
+        (set-face-background 'highlight-indent-guides-top-odd-face "#A0A0A0")
+        (set-face-background 'highlight-indent-guides-top-even-face "#909090"))))
+  (add-hook 'after-load-theme-hook #'my/set-indent-guide-colors)
+  (my/set-indent-guide-colors))
+
 (provide 'my-ui)
