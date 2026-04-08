@@ -7,4 +7,5 @@
 (require 'my-git)
 ;; (require 'my-completion)
 ;; (require 'my-clojure)
+;; (require 'my-utils)
 ;; Add more module requires here...
