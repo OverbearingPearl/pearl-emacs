@@ -68,10 +68,11 @@ Add user authentication
   (my/update-aidermacs-extra-args)
   :init
   (let* ((source (car (auth-source-search :host "openrouter.ai" :user "api-key")))
-         (secret (plist-get source :secret))
-         (api-key (funcall secret)))
+         (api-key (when source (funcall (plist-get source :secret)))))
+    (unless api-key
+      (setq api-key (read-string "Enter OPENROUTER_API_KEY: ")))
     (when api-key
       (setenv "OPENROUTER_API_KEY" api-key)
-      (message "Set OPENROUTER_API_KEY: %s" api-key))))
+      (message "Set OPENROUTER_API_KEY"))))
 
 (provide 'my-ai)
