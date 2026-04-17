@@ -100,4 +100,6 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
   (add-hook 'after-load-theme-hook #'my/set-indent-guide-colors)
   (my/set-indent-guide-colors))
 
+(add-hook 'prog-mode-hook 'hs-minor-mode)
+
 (provide 'my-ui)
