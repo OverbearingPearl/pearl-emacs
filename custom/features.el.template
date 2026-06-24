@@ -2,6 +2,7 @@
 ;; This file will be automatically copied to features.el on first run if it doesn't exist.
 
 (require 'my-ui)
+(require 'my-term)
 ;; (require 'my-chinese)
 (require 'my-ai)
 (require 'my-git)
