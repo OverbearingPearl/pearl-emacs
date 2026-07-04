@@ -11,6 +11,7 @@
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
   (setq aidermacs-show-diff-after-change nil)
+  ;; (setq aidermacs-backend 'vterm)
 
   (add-to-list 'aidermacs-project-read-only-files "~/.aidermacs.prompting.md")
   (add-to-list 'aidermacs-project-read-only-files ".aidermacs.prompting.md")
@@ -18,9 +19,11 @@
   ;; Build the extra args list dynamically
   (defun my/build-aidermacs-extra-args ()
     (let ((base-args '()))
-      (setq base-args (cons "--model=openrouter/deepseek/deepseek-v3.2" base-args))
-      (setq base-args (cons "--editor-model=openrouter/z-ai/glm-4.7" base-args))
-      (setq base-args (cons "--weak-model=openrouter/mistralai/ministral-3b-2512" base-args))
+      (setq base-args (cons "--model=openrouter/mistralai/ministral-3b-2512" base-args))
+      (setq base-args (cons "--edit-format=whole" base-args))
+      (setq base-args (cons "--editor-model=openrouter/minimax/minimax-m2.5" base-args))
+      (setq base-args (cons "--editor-edit-format=diff" base-args))
+      (setq base-args (cons "--weak-model=openrouter/qwen/qwen-2.5-coder-32b-instruct" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
       (setq base-args (cons "--commit-language=en" base-args))
       (setq base-args (cons "--commit-prompt=\"Write commit message following these guidelines:
