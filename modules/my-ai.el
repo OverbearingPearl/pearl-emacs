@@ -20,7 +20,7 @@
     (let ((base-args '()))
       (setq base-args (cons "--model=openrouter/deepseek/deepseek-v3.2" base-args))
       (setq base-args (cons "--editor-model=openrouter/z-ai/glm-4.7" base-args))
-      (setq base-args (cons "--weak-model=openrouter/qwen/qwen3-235b-a22b-2507" base-args))
+      (setq base-args (cons "--weak-model=openrouter/mistralai/ministral-3b-2512" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
       (setq base-args (cons "--commit-language=en" base-args))
       (setq base-args (cons "--commit-prompt=\"Write commit message following these guidelines:
