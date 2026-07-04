@@ -18,8 +18,8 @@
   ;; Build the extra args list dynamically
   (defun my/build-aidermacs-extra-args ()
     (let ((base-args '()))
-      (setq base-args (cons "--model=openrouter/moonshotai/kimi-k2.5" base-args))
-      (setq base-args (cons "--editor-model=openrouter/minimax/minimax-m2.1" base-args))
+      (setq base-args (cons "--model=openrouter/deepseek/deepseek-v3.2" base-args))
+      (setq base-args (cons "--editor-model=openrouter/qwen/qwen-2.5-coder-32b-instruct" base-args))
       (setq base-args (cons "--weak-model=openrouter/qwen/qwen3-235b-a22b-2507" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
       (setq base-args (cons "--commit-language=en" base-args))
