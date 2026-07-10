@@ -23,7 +23,7 @@
       (setq base-args (cons "--edit-format=whole" base-args))
       (setq base-args (cons "--editor-model=openrouter/minimax/minimax-m2.5" base-args))
       (setq base-args (cons "--editor-edit-format=diff" base-args))
-      (setq base-args (cons "--weak-model=openrouter/qwen/qwen-2.5-coder-32b-instruct" base-args))
+      (setq base-args (cons "--weak-model=openrouter/z-ai/glm-4.7-flash" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
       (setq base-args (cons "--commit-language=en" base-args))
       (setq base-args (cons "--commit-prompt=\"Write commit message following these guidelines:
