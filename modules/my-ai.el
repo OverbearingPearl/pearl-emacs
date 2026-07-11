@@ -23,7 +23,7 @@
       (setq base-args (cons "--edit-format=diff" base-args))
       (setq base-args (cons "--editor-model=openrouter/deepseek/deepseek-v3.2" base-args))
       (setq base-args (cons "--editor-edit-format=diff" base-args))
-      (setq base-args (cons "--weak-model=openrouter/z-ai/glm-4.7-flash" base-args))
+      (setq base-args (cons "--weak-model=openrouter/deepseek/deepseek-chat-v3-0324" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
       (setq base-args (cons "--commit-language=en" base-args))
       (setq base-args (cons "--commit-prompt=\"Write commit message following these guidelines:
