@@ -10,10 +10,11 @@
         (executable "aider-ce" :error-msg "aider-ce not found") :on-fail silent))
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
-  (setq aidermacs-show-diff-after-change nil)
+  ;; (setq aidermacs-show-diff-after-change nil)
   ;; (setq aidermacs-backend 'vterm)
 
   (add-to-list 'aidermacs-project-read-only-files "~/.aidermacs.prompting.md")
+  (add-to-list 'aidermacs-project-read-only-files "../.aidermacs.prompting.md")
   (add-to-list 'aidermacs-project-read-only-files ".aidermacs.prompting.md")
 
   ;; Build the extra args list dynamically
