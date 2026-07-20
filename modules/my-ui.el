@@ -11,9 +11,9 @@ This font is used alongside LXGW WenKai Mono for 2:1 monospace."
       (progn
         ;; Set default font to JetBrains Mono with medium weight
         (set-face-attribute 'default nil
-                           :family "JetBrains Mono"
-                           :height 140   ; Fixed height for 2:1 monospace alignment
-                           :weight 'medium)
+                            :family "JetBrains Mono"
+                            :height 140   ; Fixed height for 2:1 monospace alignment
+                            :weight 'medium)
         ;; Ensure Latin characters use JetBrains Mono
         (set-fontset-font t 'latin "JetBrains Mono")
         ;; Optional: adjust line spacing for better appearance
@@ -100,6 +100,22 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
   (add-hook 'after-load-theme-hook #'my/set-indent-guide-colors)
   (my/set-indent-guide-colors))
 
-(add-hook 'prog-mode-hook 'hs-minor-mode)
+(use-package hideshow
+  :ensure nil
+  :hook (prog-mode . hs-minor-mode)
+  :config
+  (defun drag-defun-up (arg)
+    (interactive "p")
+    (transpose-subr #'end-of-defun (- arg))
+    (hs-hide-all))
+  (defun drag-defun-down (arg)
+    (interactive "p")
+    (transpose-subr #'end-of-defun arg)
+    (hs-hide-all))
+  (define-key hs-minor-mode-map (kbd "<M-up>") #'drag-defun-up)
+  (define-key hs-minor-mode-map (kbd "<M-down>") #'drag-defun-down))
+
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+(setq ediff-split-window-function 'split-window-horizontally)
 
 (provide 'my-ui)
