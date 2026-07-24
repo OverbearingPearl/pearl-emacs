@@ -9,5 +9,6 @@
 ;; (require 'my-completion)
 ;; (require 'my-clojure)
 ;; (require 'my-stats)
+;; (require 'my-social)
 ;; (require 'my-utils)
 ;; Add more module requires here...
