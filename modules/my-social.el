@@ -10,6 +10,7 @@
   (setq elfeed-feeds
         '("https://www.reddit.com/r/emacs/.rss"
           "https://www.reddit.com/r/gtd/.rss"
+          "https://www.reddit.com/r/zig/.rss"
           "https://news.ycombinator.com/rss"
           "https://emacs-china.org/latest.rss"))
   (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory))

@@ -18,10 +18,13 @@
 
 (require 'package)
 (setq package-archives
-      '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+      '(("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
         ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
-        ("melpa-stable" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/stable-melpa/")
         ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+;; (setq package-archives
+;;       '(("gnu" . "https://elpa.gnu.org/packages/")
+;;         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+;;         ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
