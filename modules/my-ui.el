@@ -70,10 +70,9 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
 (use-package smart-mode-line
   :init
   (setq sml/no-confirm-load-theme t)
-  (sml/setup)
   :config
   (setq rm-blacklist
-        '(" company" " yas" " WK" " Undo-Tree")))
+        '(" company" " yas" " WK" " Undo-Tree" " h-i-g" " hs" " waka" " ARev" " (*)" " ElDoc")))
 
 (use-package highlight-indent-guides
   :hook (prog-mode . highlight-indent-guides-mode)

@@ -37,3 +37,4 @@
   (setq dired-use-ls-dired nil))
 
 (load feature-file)
+(put 'erase-buffer 'disabled nil)
