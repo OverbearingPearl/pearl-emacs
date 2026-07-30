@@ -2,6 +2,8 @@
 (scroll-bar-mode -1)
 (column-number-mode 1)
 
+(add-hook 'emacs-startup-hook 'toggle-frame-maximized)
+
 (defun my/set-english-font ()
   "Set English/Latin font to JetBrains Mono.
 If the font is not found, display a warning with installation instructions.
