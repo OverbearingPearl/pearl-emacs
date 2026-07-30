@@ -69,12 +69,28 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
         beacon-blink-when-window-changes t
         beacon-blink-when-buffer-changes t))
 
+(use-package rich-minority
+  :config
+  (setq rm-whitelist
+        (rx "["
+            (zero-or-more (not (any "]")))
+            "]"
+            (or "$" "¥")
+            (or "--" (one-or-more (any digit ".")))
+            "("
+            (or "openrouter" "deepseek" "moonshot")
+            ")"))
+  (rich-minority-mode 1))
+
 (use-package smart-mode-line
   :init
   (setq sml/no-confirm-load-theme t)
+  (setq sml/theme 'respectful)
+  (setq sml/name-width 40)
+  (setq sml/mode-width 'full)
+  (setq sml/shorten-directory t)
   :config
-  (setq rm-blacklist
-        '(" company" " yas" " WK" " Undo-Tree" " h-i-g" " hs" " waka" " ARev" " (*)" " ElDoc")))
+  (sml/setup))
 
 (use-package highlight-indent-guides
   :hook (prog-mode . highlight-indent-guides-mode)
