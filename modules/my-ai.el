@@ -21,10 +21,10 @@
   (defun my/build-aidermacs-extra-args ()
     (let ((base-args '()))
       (setq base-args (cons "--model=openrouter/deepseek/deepseek-v3.2" base-args))
-      (setq base-args (cons "--edit-format=diff" base-args))
-      (setq base-args (cons "--editor-model=openrouter/deepseek/deepseek-v3.2" base-args))
+      (setq base-args (cons "--edit-format=whole" base-args))
+      (setq base-args (cons "--editor-model=openrouter/qwen/qwen3-coder-next" base-args))
       (setq base-args (cons "--editor-edit-format=diff" base-args))
-      (setq base-args (cons "--weak-model=openrouter/deepseek/deepseek-chat-v3-0324" base-args))
+      (setq base-args (cons "--weak-model=openrouter/openai/gpt-oss-20b" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
       (setq base-args (cons "--commit-language=en" base-args))
       (setq base-args (cons "--commit-prompt=\"Write commit message following these guidelines:
