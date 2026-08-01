@@ -3,15 +3,18 @@
 (require 'auth-source)
 
 (use-package aidermacs
+  :ensure nil
   :if (or
        (my-preq
         (executable "aider" :error-msg "aider CLI not found") :on-fail silent)
        (my-preq
         (executable "aider-ce" :error-msg "aider-ce not found") :on-fail silent))
+  :load-path "~/Projects/aidermacs/"
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
   ;; (setq aidermacs-show-diff-after-change nil)
   ;; (setq aidermacs-backend 'vterm)
+  (setq aidermacs-model-filter-mode 'configured-first)
 
   (add-to-list 'aidermacs-project-read-only-files ".aidermacs.prompting.md")
   (add-to-list 'aidermacs-project-read-only-files "../.aidermacs.prompting.md")
