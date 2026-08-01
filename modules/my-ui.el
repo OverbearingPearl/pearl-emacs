@@ -135,4 +135,10 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
 
+(use-package pearl-credit
+  :ensure nil
+  :load-path "~/Projects/pearl-credit/"
+  :config
+  (pearl-credit-mode 1))
+
 (provide 'my-ui)
