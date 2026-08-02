@@ -28,6 +28,21 @@ Download from: https://www.jetbrains.com/lp/mono/")))
 
 (add-hook 'after-init-hook #'my/set-english-font)
 
+;; Configure Emoji font for proper width alignment with Chinese/English text
+(defun my/set-emoji-font ()
+  "Set emoji font and scale it for 2:1 monospace alignment."
+  (when (find-font (font-spec :name "Apple Color Emoji"))
+    ;; Set emoji font for emoji charset only (not symbol)
+    (set-fontset-font t 'emoji (font-spec :family "Apple Color Emoji") nil 'append)
+    ;; Scale the emoji font to achieve double-width alignment with Chinese text
+    ;; The scaling factor 1.6 was tested to be correct for width
+    (setq face-font-rescale-alist
+          (cons '("Apple Color Emoji" . 1.6)
+                (assq-delete-all "Apple Color Emoji" face-font-rescale-alist)))))
+
+;; Set emoji font after English font, but before Chinese font (if order matters)
+(add-hook 'after-init-hook #'my/set-emoji-font)
+
 ;; Prevent automatic recentering when scrolling
 ;; Keep the cursor at the same screen position when possible
 (setq scroll-conservatively 101)
