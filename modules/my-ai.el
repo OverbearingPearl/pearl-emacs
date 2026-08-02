@@ -90,6 +90,7 @@ Add user authentication
       (getenv "DEEPSEEK_API_KEY")))
    (chatgpt-shell-model-version "qwen/qwen3-coder"))
   :config
+  (setq chatgpt-shell-model-temperature 0.0)
   (setq chatgpt-shell-swap-model-filter
         (lambda (models)
           (seq-filter (lambda (model)
