@@ -64,12 +64,19 @@ Add user authentication
   ;; Initialize aidermacs-extra-args
   (my/update-aidermacs-extra-args)
   :init
-  (let* ((source (car (auth-source-search :host "openrouter.ai" :user "api-key")))
-         (api-key (when source (funcall (plist-get source :secret)))))
-    (unless api-key
-      (setq api-key (read-string "Enter OPENROUTER_API_KEY: ")))
-    (when api-key
-      (setenv "OPENROUTER_API_KEY" api-key)
-      (message "Set OPENROUTER_API_KEY"))))
+  (let* ((openrouter-source (car (auth-source-search :host "openrouter.ai" :user "api-key")))
+         (openrouter-api-key (when openrouter-source (funcall (plist-get openrouter-source :secret)))))
+    (unless openrouter-api-key
+      (setq openrouter-api-key (read-string "Enter OPENROUTER_API_KEY: " nil nil "")))
+    (when (and openrouter-api-key (not (string-empty-p openrouter-api-key)))
+      (setenv "OPENROUTER_API_KEY" openrouter-api-key)
+      (message "Set OPENROUTER_API_KEY")))
+  (let* ((deepseek-source (car (auth-source-search :host "deepseek.com" :user "api-key")))
+         (deepseek-api-key (when deepseek-source (funcall (plist-get deepseek-source :secret)))))
+    (unless deepseek-api-key
+      (setq deepseek-api-key (read-string "Enter DEEPSEEK_API_KEY (optional): " nil nil "")))
+    (when (and deepseek-api-key (not (string-empty-p deepseek-api-key)))
+      (setenv "DEEPSEEK_API_KEY" deepseek-api-key)
+      (message "Set DEEPSEEK_API_KEY"))))
 
 (provide 'my-ai)
