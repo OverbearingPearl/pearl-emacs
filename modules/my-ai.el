@@ -88,7 +88,7 @@ Add user authentication
    (chatgpt-shell-deepseek-key
     (lambda ()
       (getenv "DEEPSEEK_API_KEY")))
-   (chatgpt-shell-model-version "openai/gpt-oss-20b"))
+   (chatgpt-shell-model-version "qwen/qwen3-coder"))
   :config
   (setq chatgpt-shell-swap-model-filter
         (lambda (models)
