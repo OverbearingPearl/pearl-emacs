@@ -79,4 +79,25 @@ Add user authentication
       (setenv "DEEPSEEK_API_KEY" deepseek-api-key)
       (message "Set DEEPSEEK_API_KEY"))))
 
+(use-package chatgpt-shell
+  :ensure t
+  :custom
+  ((chatgpt-shell-openrouter-key
+    (lambda ()
+      (getenv "OPENROUTER_API_KEY")))
+   (chatgpt-shell-deepseek-key
+    (lambda ()
+      (getenv "DEEPSEEK_API_KEY")))
+   (chatgpt-shell-show-model-icons nil)
+   (chatgpt-shell-model-version "openai/gpt-oss-20b"))
+  :config
+  (setq chatgpt-shell-swap-model-filter
+        (lambda (models)
+          (seq-filter (lambda (model)
+                        (let ((key-fn (map-elt model :key)))
+                          (when key-fn
+                            (not (string-empty-p
+                                  (or (funcall key-fn) ""))))))
+                      models))))
+
 (provide 'my-ai)
