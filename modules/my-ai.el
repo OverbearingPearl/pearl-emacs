@@ -88,7 +88,6 @@ Add user authentication
    (chatgpt-shell-deepseek-key
     (lambda ()
       (getenv "DEEPSEEK_API_KEY")))
-   (chatgpt-shell-show-model-icons nil)
    (chatgpt-shell-model-version "openai/gpt-oss-20b"))
   :config
   (setq chatgpt-shell-swap-model-filter
@@ -98,6 +97,9 @@ Add user authentication
                           (when key-fn
                             (not (string-empty-p
                                   (or (funcall key-fn) ""))))))
-                      models))))
+                      models)))
+  (setq url-proxy-services
+        '(("http" . "127.0.0.1:7897")
+          ("https" . "127.0.0.1:7897"))))
 
 (provide 'my-ai)
