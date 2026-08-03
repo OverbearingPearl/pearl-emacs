@@ -38,3 +38,5 @@
 
 (load feature-file)
 (put 'erase-buffer 'disabled nil)
+
+(setq load-prefer-newer t)
