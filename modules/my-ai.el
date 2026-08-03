@@ -23,9 +23,9 @@
   ;; Build the extra args list dynamically
   (defun my/build-aidermacs-extra-args ()
     (let ((base-args '()))
-      (setq base-args (cons "--model=openrouter/deepseek/deepseek-v4-flash" base-args))
+      (setq base-args (cons "--model=openrouter/qwen/qwen3.7-flash" base-args))
       (setq base-args (cons "--edit-format=diff" base-args))
-      (setq base-args (cons "--editor-model=openrouter/deepseek/deepseek-v4-flash" base-args))
+      (setq base-args (cons "--editor-model=openrouter/qwen/qwen3.7-flash" base-args))
       (setq base-args (cons "--editor-edit-format=diff" base-args))
       (setq base-args (cons "--weak-model=openrouter/openai/gpt-oss-20b" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
