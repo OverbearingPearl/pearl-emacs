@@ -100,7 +100,7 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
 (use-package smart-mode-line
   :init
   (setq sml/no-confirm-load-theme t)
-  (setq sml/theme 'respectful)
+  (setq sml/theme 'automatic)
   (setq sml/name-width 40)
   (setq sml/mode-width 'full)
   (setq sml/shorten-directory t)
