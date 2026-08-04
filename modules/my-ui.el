@@ -45,7 +45,10 @@ Download from: https://www.jetbrains.com/lp/mono/")))
 
 ;; Prevent automatic recentering when scrolling
 ;; Keep the cursor at the same screen position when possible
-(setq scroll-conservatively 101)
+(add-hook 'comint-mode-hook
+          (lambda ()
+            (setq-local scroll-conservatively 101)
+            (setq-local comint-scroll-show-maximum-output nil)))
 
 ;; Windmove configuration for easy window navigation
 ;; Only configure if windmove is available
