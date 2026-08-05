@@ -95,6 +95,7 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
             "]"
             (or "$" "¥")
             (or "--" (one-or-more (any digit ".")))
+            (zero-or-one "~")
             "("
             (or "openrouter" "deepseek" "moonshot")
             ")"))
@@ -157,6 +158,8 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
   :ensure nil
   :load-path "~/Projects/pearl-credit/"
   :config
-  (pearl-credit-mode 1))
+  (pearl-credit-mode 1)
+  :custom
+  (pearl-credit-default-provider 'deepseek))
 
 (provide 'my-ui)
