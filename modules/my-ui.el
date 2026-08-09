@@ -154,6 +154,42 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq ediff-split-window-function 'split-window-horizontally)
 
+(defun reluctant-forward (&optional arg)
+  "Skip spaces and tabs following the point, then move past all
+characters with the same syntax class. Do it ARG times if ARG is
+positive, or -ARG times in the opposite direction if ARG is negative."
+  (interactive "^p")
+  (or arg (setq arg 1))
+  (if (< arg 0)
+      (reluctant-backward (- arg))
+    (dotimes (_ arg)
+      (skip-chars-forward " \t")
+      (let ((char (char-after (point))))
+        (when char
+          (let ((class (char-syntax char)))
+            (while (and (not (eolp))
+                        (eq (char-syntax (char-after (point))) class))
+              (forward-char))))))))
+
+(defun reluctant-backward (&optional arg)
+  "Move backward by syntax classes. Do it ARG times if ARG is positive,
+or -ARG times in the opposite direction if ARG is negative."
+  (interactive "^p")
+  (or arg (setq arg 1))
+  (if (< arg 0)
+      (reluctant-forward (- arg))
+    (dotimes (_ arg)
+      (skip-chars-backward " \t")
+      (let ((char (char-before (point))))
+        (when char
+          (let ((class (char-syntax char)))
+            (while (and (not (bolp))
+                        (eq (char-syntax (char-before (point))) class))
+              (backward-char))))))))
+
+(global-set-key (kbd "M-f") #'reluctant-forward)
+(global-set-key (kbd "M-b") #'reluctant-backward)
+
 (use-package pearl-credit
   :ensure nil
   :load-path "~/Projects/pearl-credit/"
