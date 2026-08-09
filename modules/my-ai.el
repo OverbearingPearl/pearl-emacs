@@ -30,6 +30,7 @@
       ;; (setq base-args (cons "--editor-model=openrouter/openai/gpt-5.6-luna" base-args))
       (setq base-args (cons "--weak-model=openrouter/qwen/qwen3.7-flash" base-args))
       (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
+      (setq base-args (cons "--git-commit-verify" base-args))
       (setq base-args (cons "--commit-language=en" base-args))
       (setq base-args (cons "--commit-prompt=\"Write commit message following these guidelines:
 1. First line: concise summary (max 50 chars)
