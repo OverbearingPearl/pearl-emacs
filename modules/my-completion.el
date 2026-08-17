@@ -66,6 +66,7 @@
   (setq register-preview-delay 0.5
         register-preview-function #'consult-register-format)
   :config
+  (setq consult-git-grep-args "git --no-pager grep --null --color=never --extended-regexp --line-number -I")
   (advice-add #'register-preview :override #'consult-register-window))
 
 (use-package wgrep
