@@ -16,9 +16,24 @@
   ;; (setq aidermacs-backend 'vterm)
   (setq aidermacs-model-filter-mode 'configured-first)
 
-  (add-to-list 'aidermacs-project-read-only-files ".aidermacs.prompting.md")
-  (add-to-list 'aidermacs-project-read-only-files "../.aidermacs.prompting.md")
-  (add-to-list 'aidermacs-project-read-only-files (expand-file-name "~/.aidermacs.prompting.md"))
+  (defun my/refresh-aidermacs-read-only-files ()
+    "Rebuild `aidermacs-project-read-only-files' for current context."
+    (setq aidermacs-project-read-only-files nil)
+    (let* ((home-dir (expand-file-name "~/"))
+           (home-md (expand-file-name ".aidermacs.prompting.md" home-dir))
+           (cur-dir (or (and (buffer-file-name)
+                             (file-name-directory (buffer-file-name)))
+                        default-directory))
+           (dir (file-name-as-directory (expand-file-name cur-dir))))
+      ;; Walk upward, skipping the home-directory one.
+      (while (and dir (not (string-equal dir home-dir)))
+        (add-to-list 'aidermacs-project-read-only-files
+                     (expand-file-name ".aidermacs.prompting.md" dir))
+        (setq dir (file-name-directory (directory-file-name dir))))
+      (add-to-list 'aidermacs-global-read-only-files home-md t)))
+
+  ;; Initialize read-only files at load time.
+  (my/refresh-aidermacs-read-only-files)
 
   ;; Build the extra args list dynamically
   (defun my/build-aidermacs-extra-args ()
@@ -61,8 +76,15 @@ Add user authentication
   (defun my/update-aidermacs-extra-args ()
     (setq aidermacs-extra-args (my/build-aidermacs-extra-args)))
 
-  ;; Advise aidermacs commands to update the extra args before running
-  (advice-add 'aidermacs-transient-menu :before #'my/update-aidermacs-extra-args)
+  ;; Refresh both read-only files and extra args before running aidermacs
+  (defun my/update-aidermacs-before-session ()
+    "Refresh read-only files and extra args before invoking aidermacs."
+    (my/refresh-aidermacs-read-only-files)
+    (my/update-aidermacs-extra-args))
+
+  ;; Advise aidermacs commands to refresh before running
+  (advice-add 'aidermacs-transient-menu :before #'my/update-aidermacs-before-session)
+
   ;; Initialize aidermacs-extra-args
   (my/update-aidermacs-extra-args)
   :init
