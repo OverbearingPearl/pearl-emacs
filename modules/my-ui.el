@@ -190,12 +190,12 @@ or -ARG times in the opposite direction if ARG is negative."
 (global-set-key (kbd "M-f") #'reluctant-forward)
 (global-set-key (kbd "M-b") #'reluctant-backward)
 
-(use-package pearl-credit
+(use-package api-credit
   :ensure nil
-  :load-path "~/Projects/pearl-credit/"
+  :load-path "~/Projects/elisp/api-credit/"
   :config
-  (pearl-credit-mode 1)
+  (api-credit-mode 1)
   :custom
-  (pearl-credit-default-provider 'deepseek))
+  (api-credit-default-provider 'deepseek))
 
 (provide 'my-ui)
