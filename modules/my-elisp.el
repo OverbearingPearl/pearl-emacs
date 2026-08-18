@@ -1,7 +1,7 @@
 (require 'my-preq)
 
-(use-package pearl-paren-style
+(use-package paren-solo
   :ensure nil
-  :load-path "~/Projects/pearl-paren-style/")
+  :load-path "~/Projects/elisp/paren-solo/")
 
 (provide 'my-elisp)
