@@ -9,7 +9,7 @@
         (executable "aider" :error-msg "aider CLI not found") :on-fail silent)
        (my-preq
         (executable "aider-ce" :error-msg "aider-ce not found") :on-fail silent))
-  :load-path "~/Projects/aidermacs/"
+  :load-path "~/Projects/elisp/aidermacs/"
   :bind (("C-c a" . aidermacs-transient-menu))
   :config
   ;; (setq aidermacs-show-diff-after-change nil)
