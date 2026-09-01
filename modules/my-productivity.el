@@ -13,4 +13,10 @@
       (setenv "WAKATIME_API_KEY" api-key)
       (global-wakatime-mode 1))))
 
+(use-package full-gtd
+  :custom
+  (full-gtd-init-base-directory "~/.full-gtd/")
+  :config
+  (full-gtd-init-initialize))
+
 (provide 'my-productivity)
