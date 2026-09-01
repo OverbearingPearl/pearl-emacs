@@ -13,4 +13,4 @@
       (setenv "WAKATIME_API_KEY" api-key)
       (global-wakatime-mode 1))))
 
-(provide 'my-stats)
+(provide 'my-productivity)

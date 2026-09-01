@@ -10,7 +10,7 @@
 ;; (require 'my-elisp)
 ;; (require 'my-yaml)
 ;; (require 'my-clojure)
-;; (require 'my-stats)
+;; (require 'my-productivity)
 ;; (require 'my-social)
 ;; (require 'my-utils)
 ;; Add more module requires here...
