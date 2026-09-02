@@ -14,6 +14,8 @@
       (global-wakatime-mode 1))))
 
 (use-package full-gtd
+  :ensure nil
+  :load-path "~/Projects/elisp/full-gtd/"
   :custom
   (full-gtd-init-base-directory "~/.full-gtd/")
   :config
