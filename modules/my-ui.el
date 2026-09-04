@@ -94,7 +94,10 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
             (zero-or-more (not (any "]")))
             "]"
             (or "$" "¥")
-            (or "--" (one-or-more (any digit ".")))
+            (or "--"
+                (seq (opt (in "-+"))
+                     (one-or-more digit)
+                     (opt (seq "." (one-or-more digit)))))
             (zero-or-one "~")
             "("
             (or "openrouter" "deepseek" "moonshot")
