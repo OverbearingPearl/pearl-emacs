@@ -95,7 +95,7 @@ Add user authentication
     (when (and openrouter-api-key (not (string-empty-p openrouter-api-key)))
       (setenv "OPENROUTER_API_KEY" openrouter-api-key)
       (message "Set OPENROUTER_API_KEY")))
-  (let* ((deepseek-source (car (auth-source-search :host "deepseek.com" :user "api-key")))
+  (let* ((deepseek-source (car (auth-source-search :host "api.deepseek.com" :user "api-key")))
          (deepseek-api-key (when deepseek-source (funcall (plist-get deepseek-source :secret)))))
     (unless deepseek-api-key
       (setq deepseek-api-key (read-string "Enter DEEPSEEK_API_KEY (optional): " nil nil "")))
