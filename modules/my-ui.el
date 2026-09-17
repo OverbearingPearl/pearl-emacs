@@ -199,6 +199,6 @@ or -ARG times in the opposite direction if ARG is negative."
   :config
   (api-credit-mode 1)
   :custom
-  (api-credit-default-provider 'deepseek))
+  (api-credit-default-provider 'openrouter))
 
 (provide 'my-ui)
