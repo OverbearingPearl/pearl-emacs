@@ -127,4 +127,21 @@ Add user authentication
         '(("http" . "127.0.0.1:7897")
           ("https" . "127.0.0.1:7897"))))
 
+(use-package gptel
+  :config
+  (setq my-glm-low-backend
+        (gptel-make-openai "OpenRouter-GLM-Low"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :key (auth-source-pick-first-password :host "openrouter.ai")
+          :models '("z-ai/glm-5.3-flash")
+          :request-params '(:reasoning (:effort "low"))))
+  (setq gptel-backend my-glm-low-backend))
+
+(use-package scalpel
+  :load-path "~/Projects/elisp/scalpel/"
+  :after (gptel)
+  :commands (scalpel-open))
+
 (provide 'my-ai)
