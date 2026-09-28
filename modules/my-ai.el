@@ -129,7 +129,21 @@ Add user authentication
 
 (use-package gptel
   :config
-  (setq my-glm-low-backend
+  (setq my-openrouter-deepseek-backend
+        (gptel-make-openai "OpenRouter-DeepSeek"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :key (auth-source-pick-first-password :host "openrouter.ai")
+          :models '("deepseek/deepseek-v4-flash" "deepseek/deepseek-v4.1-flash")))
+  (setq my-openrouter-qwen-backend
+        (gptel-make-openai "OpenRouter-QWEN"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :key (auth-source-pick-first-password :host "openrouter.ai")
+          :models '("qwen/qwen3.7-flash" "qwen/qwen3-coder-next")))
+  (setq my-openrouter-glm-low-backend
         (gptel-make-openai "OpenRouter-GLM-Low"
           :host "openrouter.ai"
           :endpoint "/api/v1/chat/completions"
@@ -137,11 +151,34 @@ Add user authentication
           :key (auth-source-pick-first-password :host "openrouter.ai")
           :models '("z-ai/glm-5.3-flash")
           :request-params '(:reasoning (:effort "low"))))
-  (setq gptel-backend my-glm-low-backend))
+  (setq my-openrouter-gpt-backend
+        (gptel-make-openai "OpenRouter-GPT"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :curl-args '("--proxy" "http://127.0.0.1:7897")
+          :key (auth-source-pick-first-password :host "openrouter.ai")
+          :models '("openai/gpt-5.6-luna" "openai/gpt-5.6-sol" "openai/gpt-6-luna" "openai/gpt-6-sol")))
+  (setq my-openrouter-mercury-backend
+        (gptel-make-openai "OpenRouter-Mercury"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :key (auth-source-pick-first-password :host "openrouter.ai")
+          :models '("inception/mercury-2.5")))
+  (setq my-openrouter-laguna-backend
+        (gptel-make-openai "OpenRouter-Laguna"
+          :host "openrouter.ai"
+          :endpoint "/api/v1/chat/completions"
+          :stream t
+          :key (auth-source-pick-first-password :host "openrouter.ai")
+          :models '("poolside/laguna-s-2.1"))))
 
 (use-package scalpel
   :load-path "~/Projects/elisp/scalpel/"
   :after (gptel)
-  :commands (scalpel-open))
+  :commands (scalpel-open)
+  :custom
+  (scalpel-prompt-reply-language "Chinese"))
 
 (provide 'my-ai)

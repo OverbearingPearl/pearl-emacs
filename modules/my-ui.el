@@ -2,6 +2,8 @@
 (scroll-bar-mode -1)
 (column-number-mode 1)
 
+(setq confirm-kill-emacs 'yes-or-no-p)
+
 (add-hook 'emacs-startup-hook 'toggle-frame-maximized)
 
 (defun my/set-english-font ()
