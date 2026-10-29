@@ -1,178 +1,96 @@
 (require 'my-preq)
-(require 'vc)
 (require 'auth-source)
-
-(use-package aidermacs
-  :ensure nil
-  :if (or
-       (my-preq
-        (executable "aider" :error-msg "aider CLI not found") :on-fail silent)
-       (my-preq
-        (executable "aider-ce" :error-msg "aider-ce not found") :on-fail silent))
-  :load-path "~/Projects/elisp/aidermacs/"
-  :bind (("C-c a" . aidermacs-transient-menu))
-  :config
-  ;; (setq aidermacs-show-diff-after-change nil)
-  ;; (setq aidermacs-backend 'vterm)
-  (setq aidermacs-model-filter-mode 'configured-first)
-
-  (defun my/refresh-aidermacs-read-only-files ()
-    "Rebuild `aidermacs-project-read-only-files' for current context."
-    (setq aidermacs-project-read-only-files nil)
-    (let* ((home-dir (expand-file-name "~/"))
-           (home-md (expand-file-name ".aidermacs.prompting.md" home-dir))
-           (cur-dir (or (and (buffer-file-name)
-                             (file-name-directory (buffer-file-name)))
-                        default-directory))
-           (dir (file-name-as-directory (expand-file-name cur-dir))))
-      ;; Walk upward, skipping the home-directory one.
-      (while (and dir (not (string-equal dir home-dir)))
-        (add-to-list 'aidermacs-project-read-only-files
-                     (expand-file-name ".aidermacs.prompting.md" dir))
-        (setq dir (file-name-directory (directory-file-name dir))))
-      (add-to-list 'aidermacs-global-read-only-files home-md t)))
-
-  ;; Initialize read-only files at load time.
-  (my/refresh-aidermacs-read-only-files)
-
-  ;; Build the extra args list dynamically
-  (defun my/build-aidermacs-extra-args ()
-    (let ((base-args '()))
-      (setq base-args (cons "--chat-mode=architect" base-args))
-      (setq base-args (cons "--model=deepseek/deepseek-v4-flash" base-args))
-      ;; (setq base-args (cons "--edit-format=diff" base-args))
-      ;; (setq base-args (cons "--editor-edit-format=editor-diff" base-args))
-      (setq base-args (cons "--editor-model=openrouter/poolside/laguna-s-2.1" base-args))
-      (setq base-args (cons "--weak-model=openrouter/qwen/qwen3.7-flash" base-args))
-      (when (featurep 'my-chinese) (setq base-args (cons "--chat-language=zh" base-args)))
-      (setq base-args (cons "--git-commit-verify" base-args))
-      (setq base-args (cons "--commit-language=en" base-args))
-      (setq base-args (cons "--commit-prompt=\"Write commit message following these guidelines:
-1. First line: concise summary (max 50 chars)
-2. (Optional) Additional details when necessary:
-   - Simple changes may omit details
-   - For complex changes consider:
-     * Bullet points (- • *)
-     * Numbered lists (1. 2. 3.)
-     * Multiple paragraphs
-     * Code blocks where applicable
-
-Examples:
-Simple change:
-Fix typo in README
-
-Complex change:
-Add user authentication
-
-- Implement login/logout endpoints
-- Add JWT token support
-- Include rate limiting
-  • 100 requests/minute
-  • 500 requests/hour
-- Update documentation\"" base-args))
-      base-args))
-
-  ;; Always update aidermacs-extra-args before using aidermacs commands
-  (defun my/update-aidermacs-extra-args ()
-    (setq aidermacs-extra-args (my/build-aidermacs-extra-args)))
-
-  ;; Refresh both read-only files and extra args before running aidermacs
-  (defun my/update-aidermacs-before-session ()
-    "Refresh read-only files and extra args before invoking aidermacs."
-    (my/refresh-aidermacs-read-only-files)
-    (my/update-aidermacs-extra-args))
-
-  ;; Advise aidermacs commands to refresh before running
-  (advice-add 'aidermacs-transient-menu :before #'my/update-aidermacs-before-session)
-
-  ;; Initialize aidermacs-extra-args
-  (my/update-aidermacs-extra-args)
-  :init
-  (let* ((openrouter-source (car (auth-source-search :host "openrouter.ai" :user "api-key")))
-         (openrouter-api-key (when openrouter-source (funcall (plist-get openrouter-source :secret)))))
-    (unless openrouter-api-key
-      (setq openrouter-api-key (read-string "Enter OPENROUTER_API_KEY: " nil nil "")))
-    (when (and openrouter-api-key (not (string-empty-p openrouter-api-key)))
-      (setenv "OPENROUTER_API_KEY" openrouter-api-key)
-      (message "Set OPENROUTER_API_KEY")))
-  (let* ((deepseek-source (car (auth-source-search :host "api.deepseek.com" :user "api-key")))
-         (deepseek-api-key (when deepseek-source (funcall (plist-get deepseek-source :secret)))))
-    (unless deepseek-api-key
-      (setq deepseek-api-key (read-string "Enter DEEPSEEK_API_KEY (optional): " nil nil "")))
-    (when (and deepseek-api-key (not (string-empty-p deepseek-api-key)))
-      (setenv "DEEPSEEK_API_KEY" deepseek-api-key)
-      (message "Set DEEPSEEK_API_KEY"))))
-
-(use-package chatgpt-shell
-  :ensure t
-  :custom
-  ((chatgpt-shell-openrouter-key
-    (lambda ()
-      (getenv "OPENROUTER_API_KEY")))
-   (chatgpt-shell-deepseek-key
-    (lambda ()
-      (getenv "DEEPSEEK_API_KEY")))
-   (chatgpt-shell-model-version "deepseek-chat"))
-  :config
-  (setq chatgpt-shell-model-temperature 0.0)
-  (setq chatgpt-shell-swap-model-filter
-        (lambda (models)
-          (seq-filter (lambda (model)
-                        (let ((key-fn (map-elt model :key)))
-                          (when key-fn
-                            (not (string-empty-p
-                                  (or (funcall key-fn) ""))))))
-                      models)))
-  (setq url-proxy-services
-        '(("http" . "127.0.0.1:7897")
-          ("https" . "127.0.0.1:7897"))))
 
 (use-package gptel
   :config
-  (setq my-openrouter-deepseek-backend
-        (gptel-make-openai "OpenRouter-DeepSeek"
-          :host "openrouter.ai"
-          :endpoint "/api/v1/chat/completions"
-          :stream t
-          :key (auth-source-pick-first-password :host "openrouter.ai")
-          :models '("deepseek/deepseek-v4-flash" "deepseek/deepseek-v4.1-flash")))
-  (setq my-openrouter-qwen-backend
-        (gptel-make-openai "OpenRouter-QWEN"
-          :host "openrouter.ai"
-          :endpoint "/api/v1/chat/completions"
-          :stream t
-          :key (auth-source-pick-first-password :host "openrouter.ai")
-          :models '("qwen/qwen3.7-flash" "qwen/qwen3-coder-next")))
-  (setq my-openrouter-glm-low-backend
-        (gptel-make-openai "OpenRouter-GLM-Low"
-          :host "openrouter.ai"
-          :endpoint "/api/v1/chat/completions"
-          :stream t
-          :key (auth-source-pick-first-password :host "openrouter.ai")
-          :models '("z-ai/glm-5.3-flash")
-          :request-params '(:reasoning (:effort "low"))))
-  (setq my-openrouter-gpt-backend
-        (gptel-make-openai "OpenRouter-GPT"
-          :host "openrouter.ai"
-          :endpoint "/api/v1/chat/completions"
-          :stream t
-          :curl-args '("--proxy" "http://127.0.0.1:7897")
-          :key (auth-source-pick-first-password :host "openrouter.ai")
-          :models '("openai/gpt-5.6-luna" "openai/gpt-5.6-sol" "openai/gpt-6-luna" "openai/gpt-6-sol")))
-  (setq my-openrouter-mercury-backend
-        (gptel-make-openai "OpenRouter-Mercury"
-          :host "openrouter.ai"
-          :endpoint "/api/v1/chat/completions"
-          :stream t
-          :key (auth-source-pick-first-password :host "openrouter.ai")
-          :models '("inception/mercury-2.5")))
-  (setq my-openrouter-laguna-backend
-        (gptel-make-openai "OpenRouter-Laguna"
-          :host "openrouter.ai"
-          :endpoint "/api/v1/chat/completions"
-          :stream t
-          :key (auth-source-pick-first-password :host "openrouter.ai")
-          :models '("poolside/laguna-s-2.1"))))
+  (require 'auth-source)
+
+  ;; Part 1: shared and opt-in request parameters.
+  (defconst my-gptel-base-request-params
+    '(:temperature 0.2 :top_p 0.9 :frequency_penalty 0.2 :presence_penalty 0.0)
+    "Shared request parameters for all gptel backends.")
+
+  (defconst my-gptel-reasoning-request-params
+    '(:reasoning (:effort "low"))
+    "Opt-in request parameters for low reasoning effort.")
+
+  ;; Part 2: parameter helper.
+  (defun my-gptel-request-params (&optional reasoning)
+    "Return shared request parameters, optionally with low reasoning effort."
+    (append (when reasoning my-gptel-reasoning-request-params)
+            my-gptel-base-request-params))
+
+  ;; Part 3: vendor specification as data.
+  (defconst my-gptel-vendors
+    '(("DeepSeek" "api.deepseek.com" "/v1/chat/completions" nil
+       (deepseek-v4-flash deepseek-v4-pro))
+      ("Zhipu" "open.bigmodel.cn" "/api/paas/v4/chat/completions" nil
+       (glm-5.3-flash))
+      ("Qwen" "dashscope.aliyuncs.com" "/compatible-mode/v1/chat/completions" nil
+       (qwen3.7-flash qwen3-coder-next))
+      ("Xiaomi" "api.xiaomimimo.com" "/v1/chat/completions" nil
+       (mimo-v2.6-flash))
+      ("OfoxAI" "api.ofox.ai" "/v1/chat/completions" t
+       (openai/gpt-5.6-luna anthropic/claude-4-opus
+        z-ai/glm-5.3-flash deepseek/deepseek-v4.1-flash))
+      ("OpenRouter" "openrouter.ai" "/api/v1/chat/completions" t
+       (deepseek/deepseek-v4-flash deepseek/deepseek-v4.1-flash
+        qwen/qwen3.7-flash qwen/qwen3-coder-next z-ai/glm-5.3-flash
+        xiaomi/mimo-v2.6-flash inclusionai/ling-3.0-flash-vl
+        openai/gpt-5.6-luna openai/gpt-5.6-sol openai/gpt-6-luna
+        openai/gpt-6-sol inception/mercury-2.5 poolside/laguna-s-2.1)))
+    "Vendor specifications for OpenAI-compatible gptel backends.")
+
+  (defvar my-gptel-deepseek)
+  (defvar my-gptel-zhipu)
+  (defvar my-gptel-qwen)
+  (defvar my-gptel-ofoxai)
+  (defvar my-gptel-openrouter)
+
+  (dolist (spec my-gptel-vendors)
+    (let* ((name (nth 0 spec))
+           (key (downcase name))
+           (var (intern (format "my-gptel-%s" key))))
+      (set var
+           (gptel-make-openai name
+             :host (nth 1 spec)
+             :endpoint (nth 2 spec)
+             :stream t
+             :key #'my-gptel-api-key
+             :curl-args #'my-gptel-curl-args
+             :request-params (my-gptel-request-params (nth 3 spec))
+             :models (nth 4 spec)))))
+
+  ;; Part 4: proxy selection at request time.
+  (defconst my-gptel-host-proxy-table
+    '(("api.deepseek.com" . nil)
+      ("open.bigmodel.cn" . nil)
+      ("dashscope.aliyuncs.com" . nil)
+      ("api.xiaomimimo.com" . nil)
+      ("api.ofox.ai" . "127.0.0.1:7897")
+      ("openrouter.ai" . "127.0.0.1:7897"))
+    "Host-to-proxy mapping for gptel backends.")
+
+  (defconst my-gptel-model-proxy-overrides nil
+    "Per-model proxy overrides for gptel backends; a nil value forces a direct connection.")
+
+  (defun my-gptel-curl-args ()
+    "Return curl proxy arguments for the current gptel model."
+    (let* ((model (format "%s" gptel-model))
+           (host (and gptel-backend (gptel-backend-host gptel-backend)))
+           (override (assoc model my-gptel-model-proxy-overrides))
+           (proxy (if override
+                      (cdr override)
+                    (cdr (assoc host my-gptel-host-proxy-table)))))
+      (when proxy
+        (list "-x" proxy))))
+
+  (defun my-gptel-api-key (&optional backend)
+    "Return the API key for BACKEND, defaulting to the current backend."
+    (let* ((backend (or backend gptel-backend))
+           (host (and backend (gptel-backend-host backend))))
+      (and host
+           (auth-source-pick-first-password :host host)))))
 
 (use-package scalpel
   :load-path "~/Projects/elisp/scalpel/"
