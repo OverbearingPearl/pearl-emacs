@@ -102,7 +102,7 @@ When more than 2 windows exist, use hjkl/HJKL keys for directional switching/swa
                      (opt (seq "." (one-or-more digit)))))
             (zero-or-one "~")
             "("
-            (or "openrouter" "deepseek" "moonshot")
+            (or "openrouter" "deepseek" "moonshot" "ofoxai")
             ")"))
   (rich-minority-mode 1))
 
@@ -201,6 +201,6 @@ or -ARG times in the opposite direction if ARG is negative."
   :config
   (api-credit-mode 1)
   :custom
-  (api-credit-default-provider 'openrouter))
+  (api-credit-default-provider 'ofoxai))
 
 (provide 'my-ui)

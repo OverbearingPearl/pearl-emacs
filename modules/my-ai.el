@@ -7,7 +7,7 @@
 
   ;; Part 1: shared and opt-in request parameters.
   (defconst my-gptel-base-request-params
-    '(:temperature 0.2 :top_p 0.9 :frequency_penalty 0.2 :presence_penalty 0.0)
+    '(:temperature 0.2)
     "Shared request parameters for all gptel backends.")
 
   (defconst my-gptel-reasoning-request-params
@@ -23,7 +23,7 @@
   ;; Part 3: vendor specification as data.
   (defconst my-gptel-vendors
     '(("DeepSeek" "api.deepseek.com" "/v1/chat/completions" nil
-       (deepseek-v4-flash deepseek-v4-pro))
+       (deepseek-flash deepseek-v4-pro))
       ("Zhipu" "open.bigmodel.cn" "/api/paas/v4/chat/completions" nil
        (glm-5.3-flash))
       ("Qwen" "dashscope.aliyuncs.com" "/compatible-mode/v1/chat/completions" nil
@@ -31,14 +31,19 @@
       ("Xiaomi" "api.xiaomimimo.com" "/v1/chat/completions" nil
        (mimo-v2.6-flash))
       ("OfoxAI" "api.ofox.ai" "/v1/chat/completions" t
-       (openai/gpt-5.6-luna anthropic/claude-4-opus
-        z-ai/glm-5.3-flash deepseek/deepseek-v4.1-flash))
+       (openai/gpt-5.6-luna
+        anthropic/claude-4-opus
+        z-ai/glm-5.3-flash z-ai/glm-5.3-flashx
+        deepseek/deepseek-v4.1-flash))
       ("OpenRouter" "openrouter.ai" "/api/v1/chat/completions" t
        (deepseek/deepseek-v4-flash deepseek/deepseek-v4.1-flash
-        qwen/qwen3.7-flash qwen/qwen3-coder-next z-ai/glm-5.3-flash
-        xiaomi/mimo-v2.6-flash inclusionai/ling-3.0-flash-vl
-        openai/gpt-5.6-luna openai/gpt-5.6-sol openai/gpt-6-luna
-        openai/gpt-6-sol inception/mercury-2.5 poolside/laguna-s-2.1)))
+        qwen/qwen3.7-flash qwen/qwen3-coder-next
+        z-ai/glm-5.3-flash
+        xiaomi/mimo-v2.6-flash
+        inclusionai/ling-3.0-flash-vl
+        openai/gpt-5.6-luna openai/gpt-5.6-sol openai/gpt-6-luna openai/gpt-6-sol
+        inception/mercury-2.5
+        poolside/laguna-s-2.1)))
     "Vendor specifications for OpenAI-compatible gptel backends.")
 
   (defvar my-gptel-deepseek)

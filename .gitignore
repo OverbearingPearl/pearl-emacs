@@ -66,14 +66,15 @@ Thumbs.db
 *.dll
 *.a
 
-# Aider related files
-.aider*
-aider.log
-aider_cache.json
-
 # Transient related files
 .transient-*
 transient-history
 
 # forge
 forge-db.sqlite
+
+elfeed/
+hackernews/
+request/
+url/
+.org-id-locations
