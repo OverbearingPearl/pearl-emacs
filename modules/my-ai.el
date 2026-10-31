@@ -10,6 +10,18 @@
        (deepseek-flash))
       ("Zhipu" "open.bigmodel.cn" "/api/v1/responses"
        (glm-5.3-flash glm-5.3-flashx))
+      ("Qwen" "dashscope.aliyuncs.com" "/compatible-mode/v1/responses"
+       (qwen3.8-max qwen3.7-plus qwen3.8-flash))
+      ("Doubao" "ark.cn-beijing.volces.com" "/api/v3/responses"
+       (doubao-seed-2.1-pro doubao-seed-2.1-lite))
+      ("Moonshot" "api.moonshot.ai" "/v1/responses"
+       (kimi-k3.1-pro kimi-k3 kimi-k2.6 kimi-k2.7-code))
+      ("Xiaomi" "api.mimo.mi.com" "/v1/responses"
+       (mimo-v2.6-pro mimo-v2.6-flash))
+      ("Tencent" "tokenhub.tencentmaas.com" "/v1/responses"
+       (hy4-preview hy3))
+      ("MiniMax" "api.minimax.cn" "/v1/responses"
+       (MiniMax-M3.1-Flash MiniMax-M3))
       ("OfoxAI" "api.ofox.ai" "/v1/responses"
        (deepseek/deepseek-v4.1-flash
         z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
@@ -27,6 +39,12 @@ Request parameters are configured separately in
 
   (defvar my-gptel-deepseek)
   (defvar my-gptel-zhipu)
+  (defvar my-gptel-qwen)
+  (defvar my-gptel-doubao)
+  (defvar my-gptel-moonshot)
+  (defvar my-gptel-xiaomi)
+  (defvar my-gptel-tencent)
+  (defvar my-gptel-minimax)
   (defvar my-gptel-ofoxai)
   (defvar my-gptel-openrouter)
 
@@ -46,6 +64,12 @@ Request parameters are configured separately in
   (defconst my-gptel-host-proxy-table
     '(("api.deepseek.com" . nil)
       ("open.bigmodel.cn" . nil)
+      ("dashscope.aliyuncs.com" . nil)
+      ("ark.cn-beijing.volces.com" . nil)
+      ("api.moonshot.ai" . nil)
+      ("api.mimo.mi.com" . nil)
+      ("tokenhub.tencentmaas.com" . nil)
+      ("api.minimax.cn" . nil)
       ("api.ofox.ai" . "127.0.0.1:7897")
       ("openrouter.ai" . "127.0.0.1:7897"))
     "Host-to-proxy mapping for gptel backends.")
