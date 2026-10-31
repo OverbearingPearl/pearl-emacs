@@ -7,53 +7,23 @@
 
   (defconst my-gptel-vendors
     '(("DeepSeek" "api.deepseek.com" "/v1/responses"
-       "low"
        (deepseek-flash))
-      ("Zhipu" "open.bigmodel.cn" "/api/paas/v4/responses"
-       nil
+      ("Zhipu" "open.bigmodel.cn" "/api/v1/responses"
        (glm-5.3-flash glm-5.3-flashx))
       ("OfoxAI" "api.ofox.ai" "/v1/responses"
-       "low"
-       (z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
-        deepseek/deepseek-v4.1-flash))
-      ("OpenRouter" "openrouter.ai" "/api/v1/responses"
-       "low"
-       (z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
+       (deepseek/deepseek-v4.1-flash
+        z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
         xiaomi/mimo-v2.6-flash
-        deepseek/deepseek-v4.1-flash
+        openai/gpt-6-luna))
+      ("OpenRouter" "openrouter.ai" "/api/v1/responses"
+       (deepseek/deepseek-v4.1-flash
+        z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
+        xiaomi/mimo-v2.6-flash
         openai/gpt-6-luna)))
     "Vendor specifications for gptel backends using the OpenAI Responses API.
-The 4th element is a reasoning effort value (nil, the string
-\"none\", or an effort string such as \"low\"/\"high\") from
-which `my-gptel-request-params' derives the request parameters.")
-
-  (defun my-gptel-request-params (effort)
-    "Derive gptel request parameters from reasoning EFFORT.
-EFFORT is nil, the string \"none\", or an effort string such as
-\"low\"/\"high\".  A string effort explicitly enables reasoning
-and configures only :top_p; \"none\" explicitly disables
-reasoning and configures :temperature 0.0; nil configures
-nothing at all---the :reasoning key and any sampling parameters
-are omitted, deferring entirely to the endpoint defaults.  The
-reasoning-on branch samples with :top_p only, and the
-reasoning-off branch samples with :temperature only; the two
-sampling parameter sets are never mixed in one request."
-    (cond
-      ;; Reasoning on: thinking models silently ignore temperature,
-      ;; so top_p 0.95 (the floor of DeepSeek's thinking-mode
-      ;; 0.95-1.0 range) is the only effective sampling knob.
-      ((and effort (not (equal effort "none")))
-       (list :reasoning (list :effort effort) :top_p 0.95))
-      ;; Reasoning explicitly off ("none"): send the explicit
-      ;; reasoning-off switch so the provider does not fall back
-      ;; to its default reasoning behavior.
-      ((equal effort "none")
-       (list :reasoning (list :effort "none") :temperature 0.0))
-      ;; Reasoning unconfigured (nil): send nothing at all; both
-      ;; the :reasoning key and sampling parameters are omitted,
-      ;; deferring entirely to the endpoint defaults.
-      (t
-       nil)))
+Each vendor specification contains a name, host, endpoint, and model list.
+Request parameters are configured separately in
+`my/gptel-model-request-params`.")
 
   (defvar my-gptel-deepseek)
   (defvar my-gptel-zhipu)
@@ -71,8 +41,7 @@ sampling parameter sets are never mixed in one request."
              :stream t
              :key #'my-gptel-api-key
              :curl-args #'my-gptel-curl-args
-             :request-params (my-gptel-request-params (nth 3 spec))
-             :models (nth 4 spec)))))
+             :models (nth 3 spec)))))
 
   (defconst my-gptel-host-proxy-table
     '(("api.deepseek.com" . nil)
@@ -101,6 +70,70 @@ sampling parameter sets are never mixed in one request."
            (host (and backend (gptel-backend-host backend))))
       (and host
            (auth-source-pick-first-password :host host)))))
+
+(defconst my/gptel-model-request-params
+  '((deepseek-flash                  . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (deepseek/deepseek-v4.1-flash    . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (glm-5.3-flash                   . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (glm-5.3-flashx                  . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (z-ai/glm-5.3-flashx             . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (z-ai/glm-5.3-flash              . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (xiaomi/mimo-v2.6-flash          . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (openai/gpt-6-luna               . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0))))
+  "Per-model request parameters for gptel, one entry per model
+registered in `my-gptel-vendors'.
+
+Each entry is (MODEL . PARAMS) where PARAMS is split into two
+categories: `:reasoning', the reasoning object handed to the
+endpoint verbatim, uniformly `(:effort \"low\")' for every model
+listed here; and `:sampling', a plist containing exactly
+`:temperature 0.7', `:presence_penalty 0', and
+`:frequency_penalty 0'.  Sampling uses temperature, not `:top_p';
+do not combine temperature and `:top_p'.  These sampling
+parameters apply only to the models listed in this table.
+`my/gptel--flatten-request-params' flattens the two categories
+into a flat request parameter list, and
+`my/gptel--install-request-params' applies the flattened result
+as gptel model properties.  Any model absent from this table
+receives no overrides at all: every request parameter falls back
+entirely to the endpoint defaults.")
+
+(defun my/gptel--flatten-request-params (entry)
+  "Flatten one categorized ENTRY of `my/gptel-model-request-params'
+into a request-params plist for gptel.
+
+ENTRY is (MODEL . PARAMS) and PARAMS keys are categories.  A
+boolean category value (nil or t) is a marker and contributes
+nothing.  The :sampling category holds top-level parameter pairs
+and is spliced flat.  It may contain multiple pairs, but
+temperature and top_p must not both be set for a model.  Any other
+category holding a plist or another atom is emitted as a single
+(CATEGORY VALUE) pair, so nested API objects such as an OpenAI
+reasoning object or an Anthropic thinking budget can be added to
+the table later without changing this function."
+  (let ((result nil)
+        (rest (cdr entry)))
+    (while rest
+      (let ((category (pop rest))
+            (value (pop rest)))
+        (unless (booleanp value)
+          (if (eq category :sampling)
+              (setq result (append result (copy-sequence value)))
+            (setq result (append result (list category value)))))))
+    result))
+
+(defun my/gptel--install-request-params ()
+  "Flatten each entry in `my/gptel-model-request-params' and store the
+result on the corresponding model symbol's :request-params property.
+
+gptel reads the :request-params property at the end of its parameter
+merge chain when building a request, so a value stored here overrides
+both the backend and the global params for that model."
+  (dolist (entry my/gptel-model-request-params)
+    (put (car entry) :request-params
+         (my/gptel--flatten-request-params entry))))
+
+(my/gptel--install-request-params)
 
 (use-package scalpel
   :load-path "~/Projects/elisp/scalpel/"
