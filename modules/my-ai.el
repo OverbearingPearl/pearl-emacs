@@ -26,6 +26,7 @@
        (deepseek/deepseek-v4.1-flash
         z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
         xiaomi/mimo-v2.6-flash
+        minimax/minimax-m3
         openai/gpt-6-luna))
       ("OpenRouter" "openrouter.ai" "/api/v1/responses"
        (deepseek/deepseek-v4.1-flash
