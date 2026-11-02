@@ -6,37 +6,43 @@
   (require 'auth-source)
 
   (defconst my-gptel-vendors
-    '(("DeepSeek" "api.deepseek.com" "/v1/responses"
+    '(("DeepSeek" gptel-make-openai-responses "api.deepseek.com" "/v1/responses"
        (deepseek-flash))
-      ("Zhipu" "open.bigmodel.cn" "/api/v1/responses"
+      ("Zhipu" gptel-make-openai-responses "open.bigmodel.cn" "/api/v1/responses"
        (glm-5.3-flash glm-5.3-flashx))
-      ("Qwen" "dashscope.aliyuncs.com" "/compatible-mode/v1/responses"
+      ("Qwen" gptel-make-openai-responses "dashscope.aliyuncs.com" "/compatible-mode/v1/responses"
        (qwen3.8-max qwen3.7-plus qwen3.8-flash))
-      ("Doubao" "ark.cn-beijing.volces.com" "/api/v3/responses"
+      ("Doubao" gptel-make-openai-responses "ark.cn-beijing.volces.com" "/api/v3/responses"
        (doubao-seed-2.1-pro doubao-seed-2.1-lite))
-      ("Moonshot" "api.moonshot.ai" "/v1/responses"
+      ("Moonshot" gptel-make-openai-responses "api.moonshot.ai" "/v1/responses"
        (kimi-k3.1-pro kimi-k3 kimi-k2.6 kimi-k2.7-code))
-      ("Xiaomi" "api.mimo.mi.com" "/v1/responses"
+      ("Xiaomi" gptel-make-openai-responses "api.mimo.mi.com" "/v1/responses"
        (mimo-v2.6-pro mimo-v2.6-flash))
-      ("Tencent" "tokenhub.tencentmaas.com" "/v1/responses"
+      ("Tencent" gptel-make-openai-responses "tokenhub.tencentmaas.com" "/v1/responses"
        (hy4-preview hy3))
-      ("MiniMax" "api.minimax.cn" "/v1/responses"
+      ("MiniMax" gptel-make-openai-responses "api.minimax.cn" "/v1/responses"
        (MiniMax-M3.1-Flash MiniMax-M3))
-      ("OfoxAI" "api.ofox.ai" "/v1/responses"
+      ("OfoxAI" gptel-make-openai-responses "api.ofox.ai" "/v1/responses"
        (deepseek/deepseek-v4.1-flash
-        z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
+        z-ai/glm-5.3-flash
         xiaomi/mimo-v2.6-flash
         minimax/minimax-m3
         openai/gpt-6-luna))
-      ("OpenRouter" "openrouter.ai" "/api/v1/responses"
+      ("OfoxAI-Chat" gptel-make-openai "api.ofox.ai" "/v1/chat/completions"
+       (z-ai/glm-5.3-flashx))
+      ("OpenRouter" gptel-make-openai-responses "openrouter.ai" "/api/v1/responses"
        (deepseek/deepseek-v4.1-flash
         z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
         xiaomi/mimo-v2.6-flash
         openai/gpt-6-luna)))
-    "Vendor specifications for gptel backends using the OpenAI Responses API.
-Each vendor specification contains a name, host, endpoint, and model list.
-Request parameters are configured separately in
-`my/gptel-model-request-params`.")
+    "Vendor specifications for gptel backends.
+Each entry is a five-element list (NAME CONSTRUCTOR HOST ENDPOINT MODELS);
+CONSTRUCTOR is the backend constructor and fixes the protocol used by
+every model in the entry: `gptel-make-openai-responses' for the OpenAI
+Responses API, `gptel-make-openai' for the chat completions API.  The
+OfoxAI models are split across the OfoxAI and OfoxAI-Chat entries on
+this basis.  Request parameters are configured separately in
+`my/gptel-model-request-params'.")
 
   (defvar my-gptel-deepseek)
   (defvar my-gptel-zhipu)
@@ -47,20 +53,22 @@ Request parameters are configured separately in
   (defvar my-gptel-tencent)
   (defvar my-gptel-minimax)
   (defvar my-gptel-ofoxai)
+  (defvar my-gptel-ofoxai-chat)
   (defvar my-gptel-openrouter)
 
   (dolist (spec my-gptel-vendors)
     (let* ((name (nth 0 spec))
+           (constructor (nth 1 spec))
            (key (downcase name))
            (var (intern (format "my-gptel-%s" key))))
       (set var
-           (gptel-make-openai-responses name
-             :host (nth 1 spec)
-             :endpoint (nth 2 spec)
+           (funcall constructor name
+             :host (nth 2 spec)
+             :endpoint (nth 3 spec)
              :stream t
              :key #'my-gptel-api-key
              :curl-args #'my-gptel-curl-args
-             :models (nth 3 spec)))))
+             :models (nth 4 spec)))))
 
   (defconst my-gptel-host-proxy-table
     '(("api.deepseek.com" . nil)
