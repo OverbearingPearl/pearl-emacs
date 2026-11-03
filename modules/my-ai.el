@@ -160,9 +160,6 @@ both the backend and the global params for that model."
     (put (car entry) :request-params
          (my/gptel--flatten-request-params entry))))
 
-(with-eval-after-load 'gptel
-  (my-gptel-qwen-enable-session-cache))
-
 (my/gptel--install-request-params)
 
 (use-package scalpel
