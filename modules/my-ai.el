@@ -12,7 +12,7 @@
        (deepseek-flash))
       ("Zhipu" gptel-make-openai-responses "open.bigmodel.cn" "/api/v1/responses"
        (glm-5.3-flash glm-5.3-flashx))
-      ("Qwen" gptel-make-openai-responses "llm-l5plvn5p70xoh8n5.cn-beijing.maas.aliyuncs.com" "/compatible-mode/v1/responses"
+      ("Qwen" gptel-make-openai "llm-l5plvn5p70xoh8n5.cn-beijing.maas.aliyuncs.com" "/compatible-mode/v1/chat/completions"
        (qwen3.8-max-0902 qwen3.8-max qwen3.7-plus qwen3.8-flash))
       ("Doubao" gptel-make-openai-responses "ark.cn-beijing.volces.com" "/api/v3/responses"
        (doubao-seed-2.1-pro doubao-seed-2.1-lite))
@@ -106,31 +106,6 @@ this basis.  Request parameters are configured separately in
       (and host
            (auth-source-pick-first-password :host host)))))
 
-(defvar my-gptel-qwen--session-cache-wrapped nil
-  "Non-nil once the header slot of `my-gptel-qwen' has been wrapped.")
-
-(defun my-gptel-qwen-enable-session-cache ()
-  "Merge the DashScope session-cache header into `my-gptel-qwen' requests.
-
-Wraps (rather than replaces) the backend's header generator: the old
-function is preserved and its returned alist gets
-(\"x-dashscope-session-cache\" . \"enable\") prepended.  Does nothing
-when the backend is not yet bound or when already wrapped."
-  (when (and (boundp 'my-gptel-qwen)
-             (not my-gptel-qwen--session-cache-wrapped))
-    (setq my-gptel-qwen--session-cache-wrapped t)
-    (let ((old-header (gptel-backend-header my-gptel-qwen)))
-      (setf (gptel-backend-header my-gptel-qwen)
-            (if (functionp old-header)
-                (lambda (&rest args)
-                  (let ((result (apply old-header args)))
-                    (if (listp result)
-                        (cons '("x-dashscope-session-cache" . "enable")
-                              result)
-                      result)))
-              (lambda (& _)
-                (list '("x-dashscope-session-cache" . "enable"))))))))
-
 (defconst my/gptel-model-request-params
   '((deepseek-flash                  . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
     (deepseek/deepseek-v4.1-flash    . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
@@ -139,7 +114,10 @@ when the backend is not yet bound or when already wrapped."
     (z-ai/glm-5.3-flashx             . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
     (z-ai/glm-5.3-flash              . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
     (xiaomi/mimo-v2.6-flash          . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
-    (openai/gpt-6-luna               . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0))))
+    (openai/gpt-6-luna               . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (qwen3.8-flash                   . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (doubao-seed-2.1-lite            . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
+    (MiniMax-M3.1-Flash              . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0))))
   "Per-model request parameters for gptel, one entry per model
 registered in `my-gptel-vendors'.
 
@@ -147,7 +125,7 @@ Each entry is (MODEL . PARAMS) where PARAMS is split into two
 categories: `:reasoning', the reasoning object handed to the
 endpoint verbatim, uniformly `(:effort \"low\")' for every model
 listed here; and `:sampling', a plist containing exactly
-`:temperature 0.7', `:presence_penalty 0', and
+`:temperature 0.0', `:presence_penalty 0', and
 `:frequency_penalty 0'.  Sampling uses temperature, not `:top_p';
 do not combine temperature and `:top_p'.  These sampling
 parameters apply only to the models listed in this table.
