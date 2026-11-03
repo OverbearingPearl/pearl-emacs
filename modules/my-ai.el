@@ -8,35 +8,24 @@
   (require 'auth-source)
 
   (defconst my-gptel-vendors
-    '(("DeepSeek" gptel-make-openai-responses "api.deepseek.com" "/v1/responses"
-       (deepseek-flash))
-      ("Zhipu" gptel-make-openai-responses "open.bigmodel.cn" "/api/v1/responses"
-       (glm-5.3-flash glm-5.3-flashx))
-      ("Qwen" gptel-make-openai "llm-l5plvn5p70xoh8n5.cn-beijing.maas.aliyuncs.com" "/compatible-mode/v1/chat/completions"
-       (qwen3.8-max-0902 qwen3.8-max qwen3.7-plus qwen3.8-flash))
-      ("Doubao" gptel-make-openai-responses "ark.cn-beijing.volces.com" "/api/v3/responses"
-       (doubao-seed-2.1-pro doubao-seed-2.1-lite))
-      ("Moonshot" gptel-make-openai-responses "api.moonshot.cn" "/v1/responses"
-       (kimi-k3.1-pro kimi-k3 kimi-k2.6 kimi-k2.7-code))
-      ("Xiaomi" gptel-make-openai-responses "api.mimo.mi.com" "/v1/responses"
-       (mimo-v2.6-pro mimo-v2.6-flash))
-      ("Tencent" gptel-make-openai-responses "tokenhub.tencentmaas.com" "/v1/responses"
-       (hy4-preview hy3))
-      ("MiniMax" gptel-make-openai-responses "api.minimax.cn" "/v1/responses"
-       (MiniMax-M3.1-Flash MiniMax-M3))
-      ("OfoxAI" gptel-make-openai-responses "api.ofox.ai" "/v1/responses"
-       (deepseek/deepseek-v4.1-flash
-        z-ai/glm-5.3-flash
-        xiaomi/mimo-v2.6-flash
-        minimax/minimax-m3
-        openai/gpt-6-luna))
-      ("OfoxAI-Chat" gptel-make-openai "api.ofox.ai" "/v1/chat/completions"
-       (z-ai/glm-5.3-flashx))
-      ("OpenRouter" gptel-make-openai-responses "openrouter.ai" "/api/v1/responses"
-       (deepseek/deepseek-v4.1-flash
-        z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
-        xiaomi/mimo-v2.6-flash
-        openai/gpt-6-luna)))
+    '(("DeepSeek" gptel-make-openai-responses "api.deepseek.com" "/v1/responses" (deepseek-flash))
+      ("Zhipu" gptel-make-openai-responses "open.bigmodel.cn" "/api/v1/responses" (glm-5.3-flash glm-5.3-flashx))
+      ("Qwen" gptel-make-openai "llm-l5plvn5p70xoh8n5.cn-beijing.maas.aliyuncs.com" "/compatible-mode/v1/chat/completions" (qwen3.8-max-0902 qwen3.8-max qwen3.7-plus qwen3.8-flash))
+      ("Doubao" gptel-make-openai-responses "ark.cn-beijing.volces.com" "/api/v3/responses" (doubao-seed-2.1-pro doubao-seed-2.1-lite))
+      ("Moonshot" gptel-make-openai-responses "api.moonshot.cn" "/v1/responses" (kimi-k3.1-pro kimi-k3 kimi-k2.6 kimi-k2.7-code))
+      ("Xiaomi" gptel-make-openai-responses "api.mimo.mi.com" "/v1/responses" (mimo-v2.6-pro mimo-v2.6-flash))
+      ("Tencent" gptel-make-openai-responses "tokenhub.tencentmaas.com" "/v1/responses" (hy4-preview hy3))
+      ("MiniMax" gptel-make-openai-responses "api.minimax.cn" "/v1/responses" (MiniMax-M3.1-Flash MiniMax-M3))
+      ("OfoxAI" gptel-make-openai-responses "api.ofox.ai" "/v1/responses" (deepseek/deepseek-v4.1-flash
+                                                                           z-ai/glm-5.3-flash
+                                                                           xiaomi/mimo-v2.6-flash
+                                                                           minimax/minimax-m3
+                                                                           openai/gpt-6-luna))
+      ("OfoxAI-Chat" gptel-make-openai "api.ofox.ai" "/v1/chat/completions" (z-ai/glm-5.3-flashx))
+      ("OpenRouter" gptel-make-openai-responses "openrouter.ai" "/api/v1/responses" (deepseek/deepseek-v4.1-flash
+                                                                                     z-ai/glm-5.3-flashx z-ai/glm-5.3-flash
+                                                                                     xiaomi/mimo-v2.6-flash
+                                                                                     openai/gpt-6-luna)))
     "Vendor specifications for gptel backends.
 Each entry is a five-element list (NAME CONSTRUCTOR HOST ENDPOINT MODELS);
 CONSTRUCTOR is the backend constructor and fixes the protocol used by
