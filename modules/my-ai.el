@@ -10,8 +10,8 @@
        (deepseek-flash))
       ("Zhipu" gptel-make-openai-responses "open.bigmodel.cn" "/api/v1/responses"
        (glm-5.3-flash glm-5.3-flashx))
-      ("Qwen" gptel-make-openai-responses "dashscope.aliyuncs.com" "/compatible-mode/v1/responses"
-       (qwen3.8-max qwen3.7-plus qwen3.8-flash))
+      ("Qwen" gptel-make-openai-responses "llm-l5plvn5p70xoh8n5.cn-beijing.maas.aliyuncs.com" "/compatible-mode/v1/responses"
+       (qwen3.8-max-0902 qwen3.8-max qwen3.7-plus qwen3.8-flash))
       ("Doubao" gptel-make-openai-responses "ark.cn-beijing.volces.com" "/api/v3/responses"
        (doubao-seed-2.1-pro doubao-seed-2.1-lite))
       ("Moonshot" gptel-make-openai-responses "api.moonshot.ai" "/v1/responses"
