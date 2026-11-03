@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (require 'my-preq)
 (require 'auth-source)
 

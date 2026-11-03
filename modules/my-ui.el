@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (setq-default indent-tabs-mode nil)
 (scroll-bar-mode -1)
 (column-number-mode 1)

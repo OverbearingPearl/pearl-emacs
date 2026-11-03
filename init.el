@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (dolist (dir '("infra" "modules" "custom"))
   (add-to-list 'load-path (expand-file-name dir user-emacs-directory)))
 

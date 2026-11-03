@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;; my-preq.el --- Utility functions for checking prerequisites
 
 ;;; Commentary:

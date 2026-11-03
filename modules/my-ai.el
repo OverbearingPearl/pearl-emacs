@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (require 'my-preq)
 (require 'auth-source)
 
@@ -14,7 +16,7 @@
        (qwen3.8-max-0902 qwen3.8-max qwen3.7-plus qwen3.8-flash))
       ("Doubao" gptel-make-openai-responses "ark.cn-beijing.volces.com" "/api/v3/responses"
        (doubao-seed-2.1-pro doubao-seed-2.1-lite))
-      ("Moonshot" gptel-make-openai-responses "api.moonshot.ai" "/v1/responses"
+      ("Moonshot" gptel-make-openai-responses "api.moonshot.cn" "/v1/responses"
        (kimi-k3.1-pro kimi-k3 kimi-k2.6 kimi-k2.7-code))
       ("Xiaomi" gptel-make-openai-responses "api.mimo.mi.com" "/v1/responses"
        (mimo-v2.6-pro mimo-v2.6-flash))
@@ -73,9 +75,9 @@ this basis.  Request parameters are configured separately in
   (defconst my-gptel-host-proxy-table
     '(("api.deepseek.com" . nil)
       ("open.bigmodel.cn" . nil)
-      ("dashscope.aliyuncs.com" . nil)
+      ("llm-l5plvn5p70xoh8n5.cn-beijing.maas.aliyuncs.com" . nil)
       ("ark.cn-beijing.volces.com" . nil)
-      ("api.moonshot.ai" . nil)
+      ("api.moonshot.cn" . nil)
       ("api.mimo.mi.com" . nil)
       ("tokenhub.tencentmaas.com" . nil)
       ("api.minimax.cn" . nil)
@@ -103,6 +105,31 @@ this basis.  Request parameters are configured separately in
            (host (and backend (gptel-backend-host backend))))
       (and host
            (auth-source-pick-first-password :host host)))))
+
+(defvar my-gptel-qwen--session-cache-wrapped nil
+  "Non-nil once the header slot of `my-gptel-qwen' has been wrapped.")
+
+(defun my-gptel-qwen-enable-session-cache ()
+  "Merge the DashScope session-cache header into `my-gptel-qwen' requests.
+
+Wraps (rather than replaces) the backend's header generator: the old
+function is preserved and its returned alist gets
+(\"x-dashscope-session-cache\" . \"enable\") prepended.  Does nothing
+when the backend is not yet bound or when already wrapped."
+  (when (and (boundp 'my-gptel-qwen)
+             (not my-gptel-qwen--session-cache-wrapped))
+    (setq my-gptel-qwen--session-cache-wrapped t)
+    (let ((old-header (gptel-backend-header my-gptel-qwen)))
+      (setf (gptel-backend-header my-gptel-qwen)
+            (if (functionp old-header)
+                (lambda (&rest args)
+                  (let ((result (apply old-header args)))
+                    (if (listp result)
+                        (cons '("x-dashscope-session-cache" . "enable")
+                              result)
+                      result)))
+              (lambda (& _)
+                (list '("x-dashscope-session-cache" . "enable"))))))))
 
 (defconst my/gptel-model-request-params
   '((deepseek-flash                  . (:reasoning (:effort "low") :sampling (:temperature 0.0 :presence_penalty 0 :frequency_penalty 0)))
@@ -165,6 +192,9 @@ both the backend and the global params for that model."
   (dolist (entry my/gptel-model-request-params)
     (put (car entry) :request-params
          (my/gptel--flatten-request-params entry))))
+
+(with-eval-after-load 'gptel
+  (my-gptel-qwen-enable-session-cache))
 
 (my/gptel--install-request-params)
 

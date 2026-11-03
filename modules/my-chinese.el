@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 (defun my/set-chinese-fonts ()
   "Set Chinese font to LXGW WenKai Mono.
 If the font is not found, display a warning with installation instructions.
