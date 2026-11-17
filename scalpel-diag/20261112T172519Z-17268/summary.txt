@@ -1,0 +1,14 @@
+run      : #982
+pid      : 17268
+command  : git rev-parse --show-toplevel
+captured : 2026-11-12T17:25:19.140Z
+
+$ ps -o pid,ppid,stat,etime,time,command -p 17268
+  PID  PPID STAT ELAPSED      TIME COMMAND
+
+$ pgrep -P 17268
+
+$ lsof -p 17268
+
+$ sample 17268 2 -file /Users/madachuan/.emacs.d/scalpel-diag/20261112T172519Z-17268/sample.txt
+sample[17287]: sample cannot examine process 17268 (with name like '17268') because it no longer appears to be running.

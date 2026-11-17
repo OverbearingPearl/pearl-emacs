@@ -1,6 +1,11 @@
 ;;; -*- lexical-binding: t; -*-
 
 (setq-default indent-tabs-mode nil)
+
+;; Wrap width used by `M-q' (`fill-paragraph').  Use `setq-default' because
+;; many modes give their buffers a buffer-local `fill-column'.
+(setq-default fill-column 80)
+
 (scroll-bar-mode -1)
 (column-number-mode 1)
 
